@@ -13,7 +13,7 @@ public class UsuarioController {
         dao.usuario.setPerfilUsuario(perfilUsuario);
         dao.usuario.setSenhaUsuario(SenhaUsuario);
         dao.usuario.setConfirmacaoSenhaUsuario(confirmacaoSenhaUsuario);
-        dao.usuario.setFkFuncionarioUsuario(fkFuncionarioUsuario);
+        
         
        
     
@@ -29,7 +29,7 @@ public class UsuarioController {
         dao.usuario.setPerfilUsuario(perfilUsuario);
         dao.usuario.setSenhaUsuario(SenhaUsuario);
         dao.usuario.setConfirmacaoSenhaUsuario(confirmacaoSenhaUsuario);
-        dao.usuario.setFkFuncionarioUsuario(fkFuncionarioUsuario);
+        
         
         String msgInclusao = dao.atualizar(DAO.ALTERACAOUSUARIO);
         return msgInclusao;

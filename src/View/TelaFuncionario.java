@@ -4,20 +4,34 @@ package View;
 import Controller.FuncionarioController;
 import Controller.UsuarioController;
 import Controller.enderecoController;
+import Models.DAO;
+import Models.TabelaModelo;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 
 
 public class TelaFuncionario extends javax.swing.JInternalFrame {
     private PreparedStatement statement;
     private ResultSet resultSet;
+    
+    public DAO DAO;
+    String sqlTabela=null;
    
     
     public TelaFuncionario() {
         initComponents();
-        atualizarCampos();
+        
+        
+        
+        carregarTabela();
+        sqlTabela = "select * from funcionario";
+         preencherTabela(sqlTabela);
+        
         habilitaCampos(false,false,false,false,false,false,false,false,false,
                 false,false,false,false,false,false,false,false,false);
         
@@ -74,7 +88,7 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
         cbPerfilFuncionario = new javax.swing.JComboBox<>();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jFuncionario = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
         btnNovoFuncionario = new javax.swing.JButton();
@@ -396,7 +410,7 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
                 .addContainerGap(19, Short.MAX_VALUE))
         );
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jFuncionario.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
                 {},
@@ -407,7 +421,7 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
 
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(jFuncionario);
 
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -529,7 +543,7 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     
-     //<editor-fold defaultstate="collapsed" desc=" BOTÃO NOVO ">
+    //<editor-fold defaultstate="collapsed" desc=" BOTÃO NOVO ">
     private void btnNovoFuncionarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoFuncionarioActionPerformed
           btnNovoFuncionario.setEnabled(true);
           btnGravarFuncionario.setEnabled(true);
@@ -544,7 +558,7 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnNovoFuncionarioActionPerformed
     //</editor-fold>
      
-     //<editor-fold defaultstate="collapsed" desc=" BOTÃO ALTERAR ">
+    //<editor-fold defaultstate="collapsed" desc=" BOTÃO ALTERAR ">
     private void btnAlterarFuncionarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarFuncionarioActionPerformed
         habilitaCampos(true, true, true, true, true, true, true, true, true, 
                    true, true, true, true, true, true, true, true, true );
@@ -569,7 +583,7 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
        
        String msg = Fc.salvarFuncionario(txtNomeFuncionario.getText(),txtCpfFuncionario.getText(),txtRgFuncionario.getText(),
                txtTelFuncionario.getText(),txtCelFuncionario.getText(),txtEmailFuncionario.getText(),txtDataNasc.getText(),
-               inte/*Integer.parseInt(lblEndereco.getText())*/);
+               inte/*Integer.parseInt(lblEndereco.getText())*/,inte);
                 JOptionPane.showMessageDialog(null, msg);
                 
         habilitaCampos(false,false,false,false,false,false,false,false,false,
@@ -580,7 +594,7 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnGravarFuncionarioActionPerformed
     //</editor-fold>
   
-     //<editor-fold defaultstate="collapsed" desc=" METODO BOTAO ">
+    //<editor-fold defaultstate="collapsed" desc=" METODO BOTAO ">
     private void habilitabotoes (boolean addFnc,boolean gravaFnc,boolean alterarFnc,
             boolean limparFnc,boolean cancelarFnc ) {                                                   
         
@@ -594,7 +608,7 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
     }                                                  
     //</editor-fold>
   
-     //<editor-fold defaultstate="collapsed" desc=" MÉTODO CAMPO ">
+    //<editor-fold defaultstate="collapsed" desc=" MÉTODO CAMPO ">
         public void habilitaCampos(boolean nomeFcn, boolean rgFcn, boolean cpfFcn, boolean dataNascFcn, 
                 boolean telFcn, boolean celFcn, boolean emailFcn, boolean cepFcn,boolean logradouroFcn,
                 boolean bairroFcn,boolean numeroFcn,boolean complementoFcn, boolean CidadeFcn,boolean estadoFcn,
@@ -693,6 +707,65 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
     }
     //</editor-fold>
     
+    //<editor-fold defaultstate="collapsed" desc=" MÉTODO CARREGAR TABELA ">
+    public void carregarTabela(){
+        String sql = "select * from funcionario";
+        try{
+            statement = DAO.bd.connection.prepareStatement(sql);
+            resultSet = statement.executeQuery();
+        }catch(SQLException erro){
+            JOptionPane.showMessageDialog(null, "Erro! " + erro.toString());
+        }
+    }
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc=" MÉTODO PREENCHER TABELA ">
+    public void preencherTabela(String SQL){
+        System.out.println("1");
+        ArrayList dados = new ArrayList();
+         String[] colunas = new String[]{"idFuncionario","nomeFuncionario","cpf","rg",
+             "telefone","celular","email","dataNascimento"};
+         System.out.println("2");
+        DAO.executaSQL(SQL);  
+        System.out.println("3");
+        try{
+            DAO.resultSet.first();  
+            do{    
+                dados.add(new Object[]{DAO.resultSet.getString("idFuncionario"),DAO.resultSet.getString("nomeFuncionario"),
+                    DAO.resultSet.getString("cpf"),DAO.resultSet.getString("rg"), DAO.resultSet.getString("telefone"), 
+                    DAO.resultSet.getString("celular"), DAO.resultSet.getString("email"),DAO.resultSet.getString("dataNascimento"),
+                   } );
+            }while(DAO.resultSet.next());
+        }catch(SQLException ex){}
+        
+        
+        
+        TabelaModelo modelo = new TabelaModelo(dados, colunas);
+        jFuncionario.setModel(modelo); // recebe o modelo criado
+        jFuncionario.getColumnModel().getColumn(0).setPreferredWidth(50);  
+        jFuncionario.getColumnModel().getColumn(0).setResizable(false); 
+        jFuncionario.getColumnModel().getColumn(1).setPreferredWidth(250);  // define o tamanho das colunas e se será redimensionado ou não
+        jFuncionario.getColumnModel().getColumn(1).setResizable(true);  // não permite alterar o tamanho da coluna
+        jFuncionario.getColumnModel().getColumn(2).setPreferredWidth(70);  
+        jFuncionario.getColumnModel().getColumn(2).setResizable(false); 
+        jFuncionario.getColumnModel().getColumn(3).setPreferredWidth(120);  
+        jFuncionario.getColumnModel().getColumn(3).setResizable(false); 
+        jFuncionario.getColumnModel().getColumn(4).setPreferredWidth(120);  
+        jFuncionario.getColumnModel().getColumn(4).setResizable(false);
+        jFuncionario.getColumnModel().getColumn(5).setPreferredWidth(120);  
+        jFuncionario.getColumnModel().getColumn(5).setResizable(false);
+        jFuncionario.getColumnModel().getColumn(6).setPreferredWidth(120);  
+        jFuncionario.getColumnModel().getColumn(6).setResizable(false); 
+        jFuncionario.getColumnModel().getColumn(7).setPreferredWidth(120);  
+        jFuncionario.getColumnModel().getColumn(7).setResizable(false);  
+        jFuncionario.getTableHeader().setReorderingAllowed(false);  // Não permite reordenar as colunas
+        jFuncionario.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); // Não permite redimensionar a tabela
+        jFuncionario.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // permite selecionar apenas 1 elemento da tabela
+    }
+    //</editor-fold>
+    
+    
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAlterarFuncionario;
@@ -701,6 +774,7 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnLimparFuncionario;
     private javax.swing.JButton btnNovoFuncionario;
     private javax.swing.JComboBox<String> cbPerfilFuncionario;
+    private javax.swing.JTable jFuncionario;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -726,7 +800,6 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JLabel lblEndereco;

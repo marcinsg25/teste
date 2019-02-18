@@ -60,7 +60,7 @@ public class DAO {
             } else {
                 JOptionPane.showMessageDialog(null, "Não conectou.");
             }
-        } catch (SQLException erro) {}
+        } catch (SQLException erro) {JOptionPane.showMessageDialog(null,"fUNCIONA PORRA");}
     }
     //</editor-fold>
     
@@ -72,17 +72,18 @@ public class DAO {
                 
                 // FUNCIONARIO
                 case INCLUSAOFUNCIONARIO:
-                sql = "insert into funcionario values(null,?,?,?,?,?,?,?,?)";
+                sql = "insert into funcionario values(null,?,?,?,?,?,?,?,?,?)";
                 bd.getConnection();
                 statement = bd.connection.prepareStatement(sql);
-                statement.setString(1, funcionario.getNomeFuncionario());
+               statement.setString(1, funcionario.getNomeFuncionario());
                 statement.setString(2, funcionario.getCpfFuncionario());
                 statement.setString(3, funcionario.getRgFuncionario());
                 statement.setString(4, funcionario.getTelFuncionario());
                 statement.setString(5, funcionario.getCelFuncionario());
                 statement.setString(6, funcionario.getEmailFuncionario());
-                statement.setString(7,  funcionario.getDataNascFuncionario());
+                statement.setString(7, funcionario.getDataNascFuncionario());
                 statement.setInt(8, funcionario.getFkEnderecoFuncionario());
+                statement.setInt(9, funcionario.getFkUsuarioFuncionario());
                 
                 statement.executeUpdate();
                 statement.close();
@@ -92,7 +93,7 @@ public class DAO {
                 + "   = ?,   = ?,   = ?,  = ? where = ?";
                 bd.getConnection();
                 statement = bd.connection.prepareStatement(sql);
-                statement.setString(9, funcionario.getIdFuncionario());
+                statement.setString(10, funcionario.getIdFuncionario());
                 statement.setString(1, funcionario.getNomeFuncionario());
                 statement.setString(2, funcionario.getCpfFuncionario());
                 statement.setString(3, funcionario.getRgFuncionario());
@@ -101,27 +102,28 @@ public class DAO {
                 statement.setString(6, funcionario.getEmailFuncionario());
                 statement.setString(7, funcionario.getDataNascFuncionario());
                 statement.setInt(8, funcionario.getFkEnderecoFuncionario());
+                statement.setInt(9, funcionario.getFkUsuarioFuncionario());
                 statement.executeUpdate();
                 statement.close();
                 break;
                 
                 //USUARIO
                 case INCLUSAOUSUARIO:
-                sql = "insert into Usuario values(null,?,?,?,?,?)";
+                sql = "insert into Usuario values(null,?,?,?,?)";
                 bd.getConnection();
                 statement = bd.connection.prepareStatement(sql);
                 statement.setString(1, usuario.getLoginUsuario());
                 statement.setString(2, usuario.getPerfilUsuario());
                 statement.setString(3, usuario.getSenhaUsuario());
                 statement.setString(4, usuario.getConfirmacaoSenhaUsuario());
-                statement.setInt(5, usuario.getFkFuncionarioUsuario());
+                
                 statement.executeUpdate();
                 statement.close();
                 JOptionPane.showMessageDialog(null,usuario.getLoginUsuario());
                 JOptionPane.showMessageDialog(null,usuario.getPerfilUsuario());
                 JOptionPane.showMessageDialog(null,usuario.getSenhaUsuario());
                 JOptionPane.showMessageDialog(null,usuario.getConfirmacaoSenhaUsuario());
-                JOptionPane.showMessageDialog(null,usuario.getFkFuncionarioUsuario());
+               
                 
                 
                 
@@ -136,7 +138,7 @@ public class DAO {
                 statement.setString(2, usuario.getPerfilUsuario());
                 statement.setString(3, usuario.getSenhaUsuario());
                 statement.setString(4, usuario.getConfirmacaoSenhaUsuario());
-                statement.setInt(5, usuario.getFkFuncionarioUsuario());
+                
                 statement.executeUpdate();
                 statement.close();
                 break;

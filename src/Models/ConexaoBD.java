@@ -13,7 +13,7 @@ public class ConexaoBD {
     private final String DBNAME = "dbsistema";
     private final String URL = "jdbc:mysql://localhost:3306/" + DBNAME;
     private final String LOGIN = "root";
-    private final String SENHA = "";
+    private final String SENHA = "senac";
     
     
    public boolean getConnection(){
