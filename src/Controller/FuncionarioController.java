@@ -16,7 +16,18 @@ public class FuncionarioController {
         dao.funcionario.setTelFuncionario(telFuncionario);
         dao.funcionario.setCelFuncionario(celFuncionario);
         dao.funcionario.setEmailFuncionario(emailFuncionario);
-        dao.funcionario.setDataNascFuncionario(dataNascFuncionario);
+        
+        String data10 = dataNascFuncionario;
+        String data1 = data10.replaceAll("/","");
+        String data2 = data1.substring(0,2);
+        String data3 = data1.substring(2,4);
+        String data4 = data1.substring(4,8);
+        String dataC = data4 + "-" + data3 + "-" + data2;
+       
+      
+        dao.funcionario.setDataNascFuncionario(dataC);
+        
+        
         dao.funcionario.setFkEnderecoFuncionario(fkEnderecoFuncionario);
         dao.funcionario.setFkUsuarioFuncionario(fkUsuarioFuncionario);
        

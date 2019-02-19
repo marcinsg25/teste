@@ -18,20 +18,26 @@ import javax.swing.ListSelectionModel;
 public class TelaFuncionario extends javax.swing.JInternalFrame {
     private PreparedStatement statement;
     private ResultSet resultSet;
-    
     public DAO DAO;
     String sqlTabela=null;
+    String sqlTabela2=null;
+    public FuncionarioController fc;
    
     
     public TelaFuncionario() {
         initComponents();
+        DAO = new DAO ();
+        fc = new FuncionarioController ();
+        if(!fc.logarBD()){
+            JOptionPane.showMessageDialog(null,"Falha ao conectar, o sistema será fechado");
+            System.exit(0);    
+        }
         
-        
-        
-        carregarTabela();
-        sqlTabela = "select * from funcionario";
-         preencherTabela(sqlTabela);
-        
+       
+        sqlTabela = "select * from funcionario inner join endereco on FKendereco = idendereco inner join Usuario on FKUsuario = idUsuario";
+        sqlTabela2 = "select * from Usuario ";
+        preencherTabelaFuncionario(sqlTabela);
+        preencherTabelaUsuario(sqlTabela2);
         habilitaCampos(false,false,false,false,false,false,false,false,false,
                 false,false,false,false,false,false,false,false,false);
         
@@ -90,13 +96,13 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jFuncionario = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        jUsuario = new javax.swing.JTable();
+        lblEndereco = new javax.swing.JLabel();
         btnNovoFuncionario = new javax.swing.JButton();
         btnGravarFuncionario = new javax.swing.JButton();
         btnLimparFuncionario = new javax.swing.JButton();
         btnAlterarFuncionario = new javax.swing.JButton();
         btnCancelarFuncionario = new javax.swing.JButton();
-        lblEndereco = new javax.swing.JLabel();
 
         jTextField5.setText("jTextField5");
 
@@ -421,9 +427,14 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
 
             }
         ));
+        jFuncionario.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jFuncionarioMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jFuncionario);
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        jUsuario.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
                 {},
@@ -434,7 +445,31 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
 
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(jUsuario);
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 586, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2))
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30))
+        );
+
+        lblEndereco.setText(".");
+        lblEndereco.setEnabled(false);
 
         btnNovoFuncionario.setText("Novo Funcionário");
         btnNovoFuncionario.addActionListener(new java.awt.event.ActionListener() {
@@ -461,49 +496,6 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
 
         btnCancelarFuncionario.setText("Cancelar");
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 586, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2))
-                .addContainerGap())
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(67, 67, 67)
-                .addComponent(btnNovoFuncionario)
-                .addGap(29, 29, 29)
-                .addComponent(btnGravarFuncionario)
-                .addGap(18, 18, 18)
-                .addComponent(btnLimparFuncionario)
-                .addGap(18, 18, 18)
-                .addComponent(btnAlterarFuncionario)
-                .addGap(18, 18, 18)
-                .addComponent(btnCancelarFuncionario)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(28, 28, 28)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnNovoFuncionario)
-                    .addComponent(btnGravarFuncionario)
-                    .addComponent(btnLimparFuncionario)
-                    .addComponent(btnAlterarFuncionario)
-                    .addComponent(btnCancelarFuncionario))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30))
-        );
-
-        lblEndereco.setText(".");
-        lblEndereco.setEnabled(false);
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -521,6 +513,18 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(62, 62, 62)
+                .addComponent(btnNovoFuncionario)
+                .addGap(29, 29, 29)
+                .addComponent(btnGravarFuncionario)
+                .addGap(18, 18, 18)
+                .addComponent(btnLimparFuncionario)
+                .addGap(18, 18, 18)
+                .addComponent(btnAlterarFuncionario)
+                .addGap(18, 18, 18)
+                .addComponent(btnCancelarFuncionario)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -536,7 +540,14 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(216, Short.MAX_VALUE))
+                .addGap(23, 23, 23)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnNovoFuncionario)
+                    .addComponent(btnGravarFuncionario)
+                    .addComponent(btnLimparFuncionario)
+                    .addComponent(btnAlterarFuncionario)
+                    .addComponent(btnCancelarFuncionario))
+                .addContainerGap(174, Short.MAX_VALUE))
         );
 
         pack();
@@ -593,6 +604,45 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
        
     }//GEN-LAST:event_btnGravarFuncionarioActionPerformed
     //</editor-fold>
+   
+
+    //<editor-fold defaultstate="collapsed" desc=" METODO SELECAO LINHA FUNCIONARIO E BAIRRO ">
+    private void jFuncionarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jFuncionarioMouseClicked
+        
+        int linhaSelecionada = jFuncionario.getSelectedRow();  // pega a linha selecionada
+        
+        
+        lblFuncionario.setText(jFuncionario.getValueAt(linhaSelecionada, 0).toString());
+        txtNomeFuncionario.setText(jFuncionario.getValueAt(linhaSelecionada, 1).toString());
+        txtCpfFuncionario.setText(jFuncionario.getValueAt(linhaSelecionada, 2).toString());
+        txtRgFuncionario.setText(jFuncionario.getValueAt(linhaSelecionada, 3).toString());
+        txtTelFuncionario.setText(jFuncionario.getValueAt(linhaSelecionada, 4).toString());
+        txtCelFuncionario.setText(jFuncionario.getValueAt(linhaSelecionada, 5).toString());
+        txtEmailFuncionario.setText(jFuncionario.getValueAt(linhaSelecionada, 6).toString());
+        
+        String dataCompra = jFuncionario.getValueAt(linhaSelecionada, 7).toString();
+        String  data = dataCompra;
+        String data1 = data.replaceAll("-","");
+        String data2 = data1.substring(0,2);
+        String data3 = data1.substring(2,4);
+        String data4 = data1.substring(4,8);
+        String dataC = data4 +  data2  + data3;
+        txtDataNasc.setText(dataC);
+        txtCepFuncionario.setText(jFuncionario.getValueAt(linhaSelecionada, 8).toString());
+        txtBairroFuncionario.setText(jFuncionario.getValueAt(linhaSelecionada, 9).toString());
+        txtLogradouroFuncionario.setText(jFuncionario.getValueAt(linhaSelecionada, 10).toString());
+        txtComplementoFuncionario.setText(jFuncionario.getValueAt(linhaSelecionada, 11).toString());
+        txtNumeroFuncionario.setText(jFuncionario.getValueAt(linhaSelecionada, 12).toString());
+        txtCidadeFuncionario.setText(jFuncionario.getValueAt(linhaSelecionada, 13).toString());
+        txtEstadoFuncionario.setText(jFuncionario.getValueAt(linhaSelecionada, 14).toString());
+        txtUsuarioFuncionario.setText(jFuncionario.getValueAt(linhaSelecionada, 15).toString());
+        cbPerfilFuncionario.setSelectedItem(jFuncionario.getValueAt(linhaSelecionada, 16).toString());
+        txtSenhaFuncionario.setText(jFuncionario.getValueAt(linhaSelecionada, 17).toString());
+        txtConfirmacaoSenha.setText(jFuncionario.getValueAt(linhaSelecionada, 18).toString());
+        
+         
+    }//GEN-LAST:event_jFuncionarioMouseClicked
+    //</editor-fold>
   
     //<editor-fold defaultstate="collapsed" desc=" METODO BOTAO ">
     private void habilitabotoes (boolean addFnc,boolean gravaFnc,boolean alterarFnc,
@@ -639,8 +689,7 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
             cbPerfilFuncionario.setEnabled(perfilFcn);
         }
         //</editor-fold>
-        
-      
+         
     //<editor-fold defaultstate="collapsed" desc=" MÉTODO ATUALIZAR CAMPOS ">    
     public void atualizarCampos(){
         try{
@@ -657,22 +706,6 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
             txtCelFuncionario.setText(resultSet.getString("celular"));
             txtEmailFuncionario.setText(resultSet.getString("email"));
             txtDataNasc.setText(resultSet.getString("dataNascimento"));
-            lblEndereco.setText(resultSet.getString("Fkendereco"));
-            
-            txtCepFuncionario.setText(resultSet.getString("cep"));
-            txtBairroFuncionario.setText(resultSet.getString("bairro"));
-            txtLogradouroFuncionario.setText(resultSet.getString("logradouro"));
-            txtComplementoFuncionario.setText(resultSet.getString("complemento"));
-            txtNumeroFuncionario.setText(resultSet.getString("numero"));
-            txtCidadeFuncionario.setText(resultSet.getString("cidade"));
-            txtEstadoFuncionario.setText(resultSet.getString("estado"));
-            
-            
-            txtUsuarioFuncionario.setText(resultSet.getString("login"));
-            txtSenhaFuncionario.setText(resultSet.getString("senha"));
-            txtConfirmacaoSenha.setText(resultSet.getString("confiSenha"));
-            cbPerfilFuncionario.setSelectedItem(resultSet.getString("perfil"));
-            lblFuncionario.setText(resultSet.getString("FKfuncionario"));
             
         
            
@@ -719,22 +752,27 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
     }
     //</editor-fold>
     
-    //<editor-fold defaultstate="collapsed" desc=" MÉTODO PREENCHER TABELA ">
-    public void preencherTabela(String SQL){
-        System.out.println("1");
+    //<editor-fold defaultstate="collapsed" desc=" MÉTODO PREENCHER TABELA FUNCIONARIO E BAIRRO">
+    public void preencherTabelaFuncionario(String SQL){
+        
         ArrayList dados = new ArrayList();
          String[] colunas = new String[]{"idFuncionario","nomeFuncionario","cpf","rg",
-             "telefone","celular","email","dataNascimento"};
-         System.out.println("2");
+             "telefone","celular","email","dataNascimento","cep","bairro",
+             "logradouro","complemento","numero","cidade","estado","login","perfil","senha","confiSenha","botao"};
+         
         DAO.executaSQL(SQL);  
-        System.out.println("3");
+        String ABC = "ASDFSD";
         try{
             DAO.resultSet.first();  
             do{    
                 dados.add(new Object[]{DAO.resultSet.getString("idFuncionario"),DAO.resultSet.getString("nomeFuncionario"),
                     DAO.resultSet.getString("cpf"),DAO.resultSet.getString("rg"), DAO.resultSet.getString("telefone"), 
                     DAO.resultSet.getString("celular"), DAO.resultSet.getString("email"),DAO.resultSet.getString("dataNascimento"),
-                   } );
+                    DAO.resultSet.getString("CEP"),DAO.resultSet.getString("Bairro"),DAO.resultSet.getString("logradouro"),
+                    DAO.resultSet.getString("complemento"),DAO.resultSet.getString("numero"),DAO.resultSet.getString("cidade"),
+                    DAO.resultSet.getString("estado"),DAO.resultSet.getString("login"),DAO.resultSet.getString("perfil"),
+                    DAO.resultSet.getString("senha"),DAO.resultSet.getString("confisenha"),ABC} );
+                    
             }while(DAO.resultSet.next());
         }catch(SQLException ex){}
         
@@ -757,16 +795,62 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
         jFuncionario.getColumnModel().getColumn(6).setPreferredWidth(120);  
         jFuncionario.getColumnModel().getColumn(6).setResizable(false); 
         jFuncionario.getColumnModel().getColumn(7).setPreferredWidth(120);  
-        jFuncionario.getColumnModel().getColumn(7).setResizable(false);  
+        jFuncionario.getColumnModel().getColumn(7).setResizable(false);
+        jFuncionario.getColumnModel().getColumn(15).setMinWidth(0);  
+        jFuncionario.getColumnModel().getColumn(15).setMaxWidth(0);
+        jFuncionario.getColumnModel().getColumn(16).setMinWidth(0);  
+        jFuncionario.getColumnModel().getColumn(16).setMaxWidth(0); 
+        jFuncionario.getColumnModel().getColumn(17).setMinWidth(0);  
+        jFuncionario.getColumnModel().getColumn(17).setMaxWidth(0);
+        jFuncionario.getColumnModel().getColumn(18).setMinWidth(0);  
+        jFuncionario.getColumnModel().getColumn(18).setMaxWidth(0);
+        jFuncionario.getColumnModel().getColumn(19).setResizable(false); 
+        jFuncionario.getColumnModel().getColumn(19).setPreferredWidth(80);  
+        
         jFuncionario.getTableHeader().setReorderingAllowed(false);  // Não permite reordenar as colunas
         jFuncionario.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); // Não permite redimensionar a tabela
         jFuncionario.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // permite selecionar apenas 1 elemento da tabela
     }
     //</editor-fold>
     
-    
-    
-
+    //<editor-fold defaultstate="collapsed" desc=" MÉTODO PREENCHER TABELA USUARIO">
+     public void preencherTabelaUsuario(String SQL){
+          ArrayList dados = new ArrayList();
+         String[] colunas = new String[]{"idUsuário","Login","Perfil","Senha",
+             "CofirmaçaoSenha",};
+         
+        DAO.executaSQL(SQL);  
+       
+        try{
+            DAO.resultSet.first();  
+            do{    
+                dados.add(new Object[]{DAO.resultSet.getString("idUsuario"),DAO.resultSet.getString("Login"),
+                    DAO.resultSet.getString("perfil"),DAO.resultSet.getString("senha"), DAO.resultSet.getString("confiSenha"),} );
+            }while(DAO.resultSet.next());
+        }catch(SQLException ex){}
+        
+        
+        TabelaModelo modelo = new TabelaModelo(dados, colunas);
+        jUsuario.setModel(modelo); // recebe o modelo criado
+        jUsuario.getColumnModel().getColumn(0).setPreferredWidth(50);  
+        jUsuario.getColumnModel().getColumn(0).setResizable(false); 
+        jUsuario.getColumnModel().getColumn(1).setPreferredWidth(250);  // define o tamanho das colunas e se será redimensionado ou não
+        jUsuario.getColumnModel().getColumn(1).setResizable(true);  // não permite alterar o tamanho da coluna
+        jUsuario.getColumnModel().getColumn(2).setPreferredWidth(70);  
+        jUsuario.getColumnModel().getColumn(2).setResizable(false); 
+        jUsuario.getColumnModel().getColumn(3).setPreferredWidth(120);  
+        jUsuario.getColumnModel().getColumn(3).setResizable(false); 
+        jUsuario.getColumnModel().getColumn(4).setPreferredWidth(120);  
+         jUsuario.getColumnModel().getColumn(4).setResizable(false); 
+        jUsuario.getTableHeader().setReorderingAllowed(false);  // Não permite reordenar as colunas
+        jUsuario.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); // Não permite redimensionar a tabela
+        jUsuario.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // permite selecionar apenas 1 elemento da tabela
+         
+     } 
+      //</editor-fold>
+     
+     
+     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAlterarFuncionario;
     private javax.swing.JButton btnCancelarFuncionario;
@@ -800,8 +884,8 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable2;
     private javax.swing.JTextField jTextField5;
+    private javax.swing.JTable jUsuario;
     private javax.swing.JLabel lblEndereco;
     private javax.swing.JLabel lblFuncionario;
     private javax.swing.JLabel lblIdFuncionario;
