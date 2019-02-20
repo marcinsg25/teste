@@ -41,10 +41,10 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
         
         carregarTabela();
         atualizarCampos();
-        sqlTabela = "select * from funcionario inner join endereco on FKendereco = idendereco inner join usuario on FKUsuario = idUsuario";
-        sqlTabela2 = "select * from usuario ";
+        sqlTabela = "select * from funcionario inner join endereco on FKendereco = idendereco";//" inner join usuario on FKUsuario = idUsuario";
+       // sqlTabela2 = "select * from usuario ";
         preencherTabelaFuncionario(sqlTabela);
-        preencherTabelaUsuario(sqlTabela2);
+      //  preencherTabelaUsuario(sqlTabela2);
         habilitaCampos(false,false,false,false,false,false,false,false,false,
                 false,false,false,false,false,false,false,false,false);
         
@@ -601,7 +601,7 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
        FuncionarioController Fc = new FuncionarioController();
        enderecoController  End = new enderecoController();
         UsuarioController User = new UsuarioController();
-        int inte = 1;
+      //  String inte = "1";
       
        
         
@@ -611,13 +611,12 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
         
        
         
-       User.salvarUsuario(txtUsuarioFuncionario.getText(), (String) cbPerfilFuncionario.getSelectedItem(),txtSenhaFuncionario.getText(),
-               txtConfirmacaoSenha.getText());
+     //  User.salvarUsuario(txtUsuarioFuncionario.getText(), (String) cbPerfilFuncionario.getSelectedItem(),txtSenhaFuncionario.getText(),
+         //      txtConfirmacaoSenha.getText());
        
        
        String msg = Fc.salvarFuncionario(txtNomeFuncionario.getText(),txtCpfFuncionario.getText(),txtRgFuncionario.getText(),
-               txtTelFuncionario.getText(),txtCelFuncionario.getText(),txtEmailFuncionario.getText(),txtDataNasc.getText(),
-               inte, inte);
+               txtTelFuncionario.getText(),txtCelFuncionario.getText(),txtEmailFuncionario.getText(),txtDataNasc.getText());
                 JOptionPane.showMessageDialog(null, msg);
        
          carregarTabela();
@@ -803,7 +802,7 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
         ArrayList dados = new ArrayList();
          String[] colunas = new String[]{"idFuncionario","nomeFuncionario","cpf","rg",
              "telefone","celular","email","dataNascimento","cep","bairro",
-             "logradouro","complemento","numero","cidade","estado","login","perfil","senha","confiSenha"};
+             "logradouro","complemento","numero","cidade","estado"};//,"login","perfil","senha","confiSenha"};
          
         DAO.executaSQL(SQL);  
         
@@ -816,8 +815,8 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
                     DAO.resultSet.getString("celular"), DAO.resultSet.getString("email"),DAO.resultSet.getString("dataNascimento"),
                     DAO.resultSet.getString("CEP"),DAO.resultSet.getString("Bairro"),DAO.resultSet.getString("logradouro"),
                     DAO.resultSet.getString("complemento"),DAO.resultSet.getString("numero"),DAO.resultSet.getString("cidade"),
-                    DAO.resultSet.getString("estado"),DAO.resultSet.getString("login"),DAO.resultSet.getString("perfil"),
-                    DAO.resultSet.getString("senha"),DAO.resultSet.getString("confisenha")} );
+                    DAO.resultSet.getString("estado")});//,DAO.resultSet.getString("login"),DAO.resultSet.getString("perfil"),
+                    //DAO.resultSet.getString("senha"),DAO.resultSet.getString("confisenha")} );
                     
             }while(DAO.resultSet.next());
         }catch(SQLException ex){}

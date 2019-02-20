@@ -17,7 +17,7 @@ public class enderecoController {
         dao.endereco.setEstado(estado);
        
     
-        String msgInclusao = dao.atualizar(DAO.INCLUSAOENDERECO);
+        String msgInclusao = dao.funcionario();
         return msgInclusao;
     }
      

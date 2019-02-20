@@ -32,6 +32,57 @@ public class DAO {
     public static final byte ALTERACAOENDERECO = 7;
     
     
+    //<editor-fold defaultstate="collapsed" desc=" MÉTODO LOCALIZAR MARCA ">
+    public String funcionario(){
+        String men = "Sucesso";
+        sql = "select * idendereco from endereco where cep = ? and logradouro = ? and numero = ?" ;
+        try{
+            bd.getConnection();
+            statement = bd.connection.prepareStatement(sql);
+            statement.setString(1, endereco.getCep());
+            statement.setString(2, endereco.getLogradouro());
+            statement.setString(3, endereco.getNumero());
+            resultSet = statement.executeQuery();
+            if (resultSet == null){
+                sql = "insert into endereco (cep, bairro, logradouro, complemento, numero, cidade, estado) values ("
+                        + "?,?,?,?,?,?,?)";
+                statement = bd.connection.prepareStatement(sql);
+                statement.setString(1, endereco.getCep());
+                statement.setString(2, endereco.getBairro());
+                statement.setString(3, endereco.getLogradouro());
+                statement.setString(4, endereco.getComplemento());
+                statement.setString(5, endereco.getNumero());
+                statement.setString(6, endereco.getCidade());
+                statement.setString(7, endereco.getEstado());  
+                statement.executeUpdate();
+                statement.close();
+            }
+            else{
+                String x = resultSet.getString("idendereco");
+                statement.close();
+            } 
+            sql = "insert into funcionario (nomeFuncionario, cpf, rg, telefone, celular, email, dataNascimento, FKendereco) values(?,?,?,?,?,?,?,?)";
+            statement = bd.connection.prepareStatement(sql);
+            statement.setString(1, funcionario.getNomeFuncionario());
+            statement.setString(2, funcionario.getCpfFuncionario());
+            statement.setString(3, funcionario.getRgFuncionario());
+            statement.setString(4, funcionario.getTelFuncionario());
+            statement.setString(5, funcionario.getCelFuncionario());
+            statement.setString(6, funcionario.getEmailFuncionario());
+            statement.setString(7, funcionario.getDataNascFuncionario());
+            statement.setString(8, funcionario.getFkEnderecoFuncionario());
+            statement.executeUpdate();
+            statement.close();
+            
+            
+        }catch(SQLException erro){
+            men = "Falha na operação : \n" + erro.toString();
+        }
+        return men;
+    }
+    //</editor-fold>
+    
+    
     
     //<editor-fold defaultstate="collapsed" desc=" METODO DAO "> 
     public DAO(){
@@ -103,8 +154,8 @@ public class DAO {
                 statement.setString(5, funcionario.getCelFuncionario());
                 statement.setString(6, funcionario.getEmailFuncionario());
                 statement.setString(7, funcionario.getDataNascFuncionario());
-                statement.setInt(8, funcionario.getFkEnderecoFuncionario());
-                statement.setInt(9, funcionario.getFkUsuarioFuncionario());
+              //  statement.setInt(8, funcionario.getFkEnderecoFuncionario());
+              //  statement.setInt(9, funcionario.getFkUsuarioFuncionario());
                 
                 statement.executeUpdate();
                  
@@ -124,8 +175,8 @@ public class DAO {
                 statement.setString(5, funcionario.getCelFuncionario());
                 statement.setString(6, funcionario.getEmailFuncionario());
                 statement.setString(7, funcionario.getDataNascFuncionario());
-                statement.setInt(8, funcionario.getFkEnderecoFuncionario());
-                statement.setInt(9, funcionario.getFkUsuarioFuncionario());
+               // statement.setInt(8, funcionario.getFkEnderecoFuncionario());
+              //  statement.setInt(9, funcionario.getFkUsuarioFuncionario());
                 statement.executeUpdate();
                 statement.close();
                 break;

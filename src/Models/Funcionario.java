@@ -15,8 +15,8 @@ public class Funcionario {
     private String celFuncionario;
     private String emailFuncionario;
     private String dataNascFuncionario;
-    private int fkEnderecoFuncionario;
-    private int fkUsuarioFuncionario;        ;
+    private String fkEnderecoFuncionario;
+  //  private String fkUsuarioFuncionario;        ;
 
     public String getIdFuncionario() {
         return idFuncionario;
@@ -82,21 +82,21 @@ public class Funcionario {
         this.dataNascFuncionario = dataNascFuncionario;
     }
 
-    public int getFkEnderecoFuncionario() {
+    public String getFkEnderecoFuncionario() {
         return fkEnderecoFuncionario;
     }
 
-    public void setFkEnderecoFuncionario(int fkEnderecoFuncionario) {
+    public void setFkEnderecoFuncionario(String fkEnderecoFuncionario) {
         this.fkEnderecoFuncionario = fkEnderecoFuncionario;
     }
 
-    public int getFkUsuarioFuncionario() {
-        return fkUsuarioFuncionario;
-    }
+  //  public String getFkUsuarioFuncionario() {
+   //     return fkUsuarioFuncionario;
+  //  }
 
-    public void setFkUsuarioFuncionario(int fkUsuarioFuncionario) {
-        this.fkUsuarioFuncionario = fkUsuarioFuncionario;
-    }
+  //  public void setFkUsuarioFuncionario(String fkUsuarioFuncionario) {
+  //      this.fkUsuarioFuncionario = fkUsuarioFuncionario;
+  //  }
 
     
     

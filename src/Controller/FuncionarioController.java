@@ -9,7 +9,7 @@ public class FuncionarioController {
     
     public String salvarFuncionario( String nomeFuncionario,  String cpfFuncionario,  
             String rgFuncionario,  String telFuncionario,  String celFuncionario,  String emailFuncionario,  
-            String dataNascFuncionario,  int fkEnderecoFuncionario, int fkUsuarioFuncionario ){
+            String dataNascFuncionario ){
         DAO dao = new DAO();
         dao.funcionario.setNomeFuncionario(nomeFuncionario);
         dao.funcionario.setCpfFuncionario(cpfFuncionario);
@@ -29,16 +29,16 @@ public class FuncionarioController {
         dao.funcionario.setDataNascFuncionario(dataC);
         
         
-        dao.funcionario.setFkEnderecoFuncionario(fkEnderecoFuncionario);
-        dao.funcionario.setFkUsuarioFuncionario(fkUsuarioFuncionario);
+       // dao.funcionario.setFkEnderecoFuncionario(fkEnderecoFuncionario);
+       // dao.funcionario.setFkUsuarioFuncionario(fkUsuarioFuncionario);
        
-        String msgInclusao = dao.atualizar(DAO.INCLUSAOFUNCIONARIO);
+        String msgInclusao = dao.funcionario();
         return msgInclusao;
     }
      
     public String alterarFuncionario(String idFuncionario,  String nomeFuncionario,  String cpfFuncionario,  
             String rgFuncionario,  String telFuncionario,  String celFuncionario,  String emailFuncionario,  
-            String dataNascFuncionario,  int fkEnderecoFuncionario ){
+            String dataNascFuncionario,  String fkEnderecoFuncionario ){
         DAO dao = new DAO();
         dao.funcionario.setIdFuncionario(idFuncionario);
         dao.funcionario.setNomeFuncionario(nomeFuncionario);
