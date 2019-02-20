@@ -7,7 +7,7 @@ import Models.DAO;
 public class UsuarioController {
     
     public String salvarUsuario( String loginUsuario, String perfilUsuario, String SenhaUsuario, 
-            String confirmacaoSenhaUsuario, int fkFuncionarioUsuario){
+            String confirmacaoSenhaUsuario){
         DAO dao = new DAO();
         dao.usuario.setLoginUsuario(loginUsuario);
         dao.usuario.setPerfilUsuario(perfilUsuario);

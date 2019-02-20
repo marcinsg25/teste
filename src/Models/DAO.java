@@ -64,6 +64,27 @@ public class DAO {
     }
     //</editor-fold>
     
+     //<editor-fold defaultstate="collapsed" desc=" EXECUTAR SQL CHAVES ESTRANGEIRAS "> 
+    public ResultSet RunSQL(String sql){
+    try {
+            boolean resp;
+            resp = bd.getConnection();
+            if (resp == true) {
+                // tipo case sensitive e pode percorrer tanto do início para o fim quanto do fim para o início
+                stm = bd.connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);  
+                resultSet = stm.executeQuery(sql);
+                return resultSet;
+            } else {
+                JOptionPane.showMessageDialog(null, "Não conectou.");
+                return null;
+            }
+        } catch (SQLException erro) {
+            JOptionPane.showMessageDialog(null, "Erro de sintaxe: \n" + erro.toString());
+            return null;
+        }
+    }
+    //</editor-fold>
+    
     //<editor-fold defaultstate="collapsed" desc=" MÉTODO ATUALIZAR ">
     public String atualizar(int operacao){
         men = "Operação realizada com sucesso!";
@@ -74,8 +95,8 @@ public class DAO {
                 case INCLUSAOFUNCIONARIO:
                 sql = "insert into funcionario values(null,?,?,?,?,?,?,?,?,?)";
                 bd.getConnection();
-                statement = bd.connection.prepareStatement(sql);
-               statement.setString(1, funcionario.getNomeFuncionario());
+                statement = bd.connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+                statement.setString(1, funcionario.getNomeFuncionario());
                 statement.setString(2, funcionario.getCpfFuncionario());
                 statement.setString(3, funcionario.getRgFuncionario());
                 statement.setString(4, funcionario.getTelFuncionario());
@@ -86,6 +107,8 @@ public class DAO {
                 statement.setInt(9, funcionario.getFkUsuarioFuncionario());
                 
                 statement.executeUpdate();
+                 
+                
                 statement.close();
                 break;
                 case ALTERACAOFUNCIONARIO:
@@ -119,13 +142,9 @@ public class DAO {
                 
                 statement.executeUpdate();
                 statement.close();
-                JOptionPane.showMessageDialog(null,usuario.getLoginUsuario());
-                JOptionPane.showMessageDialog(null,usuario.getPerfilUsuario());
-                JOptionPane.showMessageDialog(null,usuario.getSenhaUsuario());
-                JOptionPane.showMessageDialog(null,usuario.getConfirmacaoSenhaUsuario());
+                
                
-                
-                
+               
                 
                 break;
                 case ALTERACAOUSUARIO:

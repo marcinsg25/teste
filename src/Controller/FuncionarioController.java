@@ -2,6 +2,7 @@
 package Controller;
 
 import Models.DAO;
+import java.sql.ResultSet;
 import java.util.Date;
 
 public class FuncionarioController {
@@ -60,6 +61,12 @@ public class FuncionarioController {
          return resp;
          
      }
+    
+    public ResultSet fkEstrangeira(String sql){
+        DAO dao = new DAO();
+        return dao.RunSQL(sql);
+    }
+    
     
     
 }
