@@ -16,7 +16,7 @@ public class Funcionario {
     private String emailFuncionario;
     private String dataNascFuncionario;
     private String fkEnderecoFuncionario;
-  //  private String fkUsuarioFuncionario;        ;
+       
 
     public String getIdFuncionario() {
         return idFuncionario;
@@ -90,15 +90,7 @@ public class Funcionario {
         this.fkEnderecoFuncionario = fkEnderecoFuncionario;
     }
 
-  //  public String getFkUsuarioFuncionario() {
-   //     return fkUsuarioFuncionario;
-  //  }
-
-  //  public void setFkUsuarioFuncionario(String fkUsuarioFuncionario) {
-  //      this.fkUsuarioFuncionario = fkUsuarioFuncionario;
-  //  }
-
-    
+ 
     
     
     

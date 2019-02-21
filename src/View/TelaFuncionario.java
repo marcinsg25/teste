@@ -39,11 +39,10 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
             System.exit(0);    
         }
         
-        carregarTabela();
-        atualizarCampos();
-        sqlTabela = "select * from funcionario inner join endereco on FKendereco = idendereco";//" inner join usuario on FKUsuario = idUsuario";
+       
+        //sqlTabela = "select * from funcionario inner join endereco on FKendereco = idendereco";//" inner join usuario on FKUsuario = idUsuario";
        // sqlTabela2 = "select * from usuario ";
-        preencherTabelaFuncionario(sqlTabela);
+        //preencherTabelaFuncionario(sqlTabela);
       //  preencherTabelaUsuario(sqlTabela2);
         habilitaCampos(false,false,false,false,false,false,false,false,false,
                 false,false,false,false,false,false,false,false,false);
@@ -599,25 +598,19 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
     //<editor-fold defaultstate="collapsed" desc=" BOTÃO GRAVAR ">
     private void btnGravarFuncionarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGravarFuncionarioActionPerformed
        FuncionarioController Fc = new FuncionarioController();
-       enderecoController  End = new enderecoController();
-        UsuarioController User = new UsuarioController();
-      //  String inte = "1";
+       UsuarioController User = new UsuarioController();
       
-       
-        
-        End.salvarEndereco(txtCepFuncionario.getText(),txtBairroFuncionario.getText(),txtLogradouroFuncionario.getText(),
-               txtComplementoFuncionario.getText(),txtNumeroFuncionario.getText(),txtCidadeFuncionario.getText(),
-               txtEstadoFuncionario.getText());
-        
-       
-        
-     //  User.salvarUsuario(txtUsuarioFuncionario.getText(), (String) cbPerfilFuncionario.getSelectedItem(),txtSenhaFuncionario.getText(),
-         //      txtConfirmacaoSenha.getText());
-       
-       
-       String msg = Fc.salvarFuncionario(txtNomeFuncionario.getText(),txtCpfFuncionario.getText(),txtRgFuncionario.getText(),
-               txtTelFuncionario.getText(),txtCelFuncionario.getText(),txtEmailFuncionario.getText(),txtDataNasc.getText());
+       String msg = Fc.salvarFuncionario(txtNomeFuncionario.getText(),txtCpfFuncionario.getText(),
+               txtRgFuncionario.getText(), txtTelFuncionario.getText(),txtCelFuncionario.getText(),
+               txtEmailFuncionario.getText(),txtDataNasc.getText(),txtCepFuncionario.getText(),txtBairroFuncionario.getText(),
+               txtLogradouroFuncionario.getText(),txtComplementoFuncionario.getText(),txtNumeroFuncionario.getText(),
+               txtCidadeFuncionario.getText(),txtEstadoFuncionario.getText(), txtUsuarioFuncionario.getText(), (String) cbPerfilFuncionario.getSelectedItem(),txtSenhaFuncionario.getText(),
+              txtConfirmacaoSenha.getText());
                 JOptionPane.showMessageDialog(null, msg);
+        
+       
+       
+       
        
          carregarTabela();
          atualizarCampos();
@@ -783,7 +776,7 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
     
     //<editor-fold defaultstate="collapsed" desc=" MÉTODO CARREGAR TABELA ">
     public void carregarTabela(){
-        String sql = "select * from funcionario inner join endereco on FKendereco = idendereco inner join Usuario on FKUsuario = idUsuario";
+        String sql = "select * from funcionario inner join endereco on FKendereco";
         try{
             statement = DAO.bd.connection.prepareStatement(sql);
             resultSet  = statement.executeQuery();

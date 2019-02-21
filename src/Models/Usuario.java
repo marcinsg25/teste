@@ -8,6 +8,7 @@ public class Usuario {
     private String perfilUsuario;
     private String SenhaUsuario;
     private String confirmacaoSenhaUsuario;
+    private String fkFuncionarioUsuario;
 
     public String getIdUsuario() {
         return idUsuario;
@@ -48,9 +49,17 @@ public class Usuario {
     public void setConfirmacaoSenhaUsuario(String confirmacaoSenhaUsuario) {
         this.confirmacaoSenhaUsuario = confirmacaoSenhaUsuario;
     }
-    
 
-  
+    public String getFkFuncionarioUsuario() {
+        return fkFuncionarioUsuario;
+    }
+
+    public void setFkFuncionarioUsuario(String fkFuncionarioUsuario) {
+        this.fkFuncionarioUsuario = fkFuncionarioUsuario;
+    }
+    
+    
+    
 
     
    

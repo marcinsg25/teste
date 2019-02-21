@@ -9,7 +9,10 @@ public class FuncionarioController {
     
     public String salvarFuncionario( String nomeFuncionario,  String cpfFuncionario,  
             String rgFuncionario,  String telFuncionario,  String celFuncionario,  String emailFuncionario,  
-            String dataNascFuncionario ){
+            String dataNascFuncionario,String cep, String bairro, String logradouro, 
+            String complemento, String numero, String cidade, String estado,String loginUsuario, 
+            String perfilUsuario, String SenhaUsuario,String confirmacaoSenhaUsuario ){
+        
         DAO dao = new DAO();
         dao.funcionario.setNomeFuncionario(nomeFuncionario);
         dao.funcionario.setCpfFuncionario(cpfFuncionario);
@@ -28,11 +31,18 @@ public class FuncionarioController {
       
         dao.funcionario.setDataNascFuncionario(dataC);
         
+        dao.endereco.setCep(cep);
+        dao.endereco.setBairro(bairro);
+        dao.endereco.setLogradouro(logradouro);
+        dao.endereco.setComplemento(complemento);
+        dao.endereco.setNumero(numero);
+        dao.endereco.setCidade(cidade);
+        dao.endereco.setEstado(estado);
         
-       // dao.funcionario.setFkEnderecoFuncionario(fkEnderecoFuncionario);
-       // dao.funcionario.setFkUsuarioFuncionario(fkUsuarioFuncionario);
+        
        
-        String msgInclusao = dao.funcionario();
+       
+         String msgInclusao = dao.atualizar(DAO.INCLUSAOFUNCIONARIO);
         return msgInclusao;
     }
      
