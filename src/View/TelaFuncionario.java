@@ -41,7 +41,8 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
         
         
         sqlTabela = "select * from funcionario inner join endereco on FKendereco = idendereco inner join usuario on FKfuncionario = idfuncionario";
-       sqlTabela2 = "select * from funcionario inner join usuario on FKfuncionario = idfuncionario inner join endereco on FKendereco = idendereco";
+       sqlTabela2 = "select * from usuario inner join funcionario on FKfuncionario = idfuncionario inner join endereco on idendereco = FKendereco ";
+       //"select * from usuario inner join funcionario on FKfuncionario inner join endereco on idendereco = FKendereco ";
         preencherTabelaFuncionario(sqlTabela);
         preencherTabelaUsuario(sqlTabela2);
         habilitaCampos(false,false,false,false,false,false,false,false,false,
@@ -610,9 +611,9 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
         
        
        
-       
-       
-         carregarTabela();
+       preencherTabelaFuncionario(sqlTabela);
+        preencherTabelaUsuario(sqlTabela2);
+    
          atualizarCampos();
          limparCampos();        
                 
@@ -668,20 +669,21 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
         
         int linhaSelecionada = jUsuario.getSelectedRow();  // pega a linha selecionada
         
-        
         txtUsuarioFuncionario.setText(jUsuario.getValueAt(linhaSelecionada, 1).toString());
         cbPerfilFuncionario.setSelectedItem(jUsuario.getValueAt(linhaSelecionada, 2).toString());
         txtSenhaFuncionario.setText(jUsuario.getValueAt(linhaSelecionada, 3).toString());
         txtConfirmacaoSenha.setText(jUsuario.getValueAt(linhaSelecionada, 4).toString());
-        lblFuncionario.setText(jFuncionario.getValueAt(linhaSelecionada, 5).toString());
-        txtNomeFuncionario.setText(jFuncionario.getValueAt(linhaSelecionada, 6).toString());
-        txtCpfFuncionario.setText(jFuncionario.getValueAt(linhaSelecionada, 7).toString());
-        txtRgFuncionario.setText(jFuncionario.getValueAt(linhaSelecionada, 8).toString());
-        txtTelFuncionario.setText(jFuncionario.getValueAt(linhaSelecionada, 9).toString());
-        txtCelFuncionario.setText(jFuncionario.getValueAt(linhaSelecionada, 10).toString());
-        txtEmailFuncionario.setText(jFuncionario.getValueAt(linhaSelecionada, 11).toString());
         
-        String dataCompra = jFuncionario.getValueAt(linhaSelecionada, 12).toString();
+        
+        lblFuncionario.setText(jUsuario.getValueAt(linhaSelecionada, 5).toString());
+        txtNomeFuncionario.setText(jUsuario.getValueAt(linhaSelecionada, 6).toString());
+        txtCpfFuncionario.setText(jUsuario.getValueAt(linhaSelecionada, 7).toString());
+        txtRgFuncionario.setText(jUsuario.getValueAt(linhaSelecionada, 8).toString());
+        txtTelFuncionario.setText(jUsuario.getValueAt(linhaSelecionada, 9).toString());
+        txtCelFuncionario.setText(jUsuario.getValueAt(linhaSelecionada, 10).toString());
+        txtEmailFuncionario.setText(jUsuario.getValueAt(linhaSelecionada, 11).toString());
+        
+        String dataCompra = jUsuario.getValueAt(linhaSelecionada, 12).toString();
         String  data = dataCompra;
         String data1 = data.replaceAll("-","");
         String data2 = data1.substring(0,2);
@@ -689,13 +691,18 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
         String data4 = data1.substring(4,8);
         String dataC = data4 +  data2  + data3;
         txtDataNasc.setText(dataC);
-        txtCepFuncionario.setText(jFuncionario.getValueAt(linhaSelecionada, 13).toString());
-        txtBairroFuncionario.setText(jFuncionario.getValueAt(linhaSelecionada, 14).toString());
-        txtLogradouroFuncionario.setText(jFuncionario.getValueAt(linhaSelecionada, 15).toString());
-        txtComplementoFuncionario.setText(jFuncionario.getValueAt(linhaSelecionada, 16).toString());
-        txtNumeroFuncionario.setText(jFuncionario.getValueAt(linhaSelecionada, 17).toString());
-        txtCidadeFuncionario.setText(jFuncionario.getValueAt(linhaSelecionada, 18).toString());
-        txtEstadoFuncionario.setText(jFuncionario.getValueAt(linhaSelecionada, 19).toString());
+        
+        
+        
+        txtCepFuncionario.setText(jUsuario.getValueAt(linhaSelecionada, 13).toString());
+        txtBairroFuncionario.setText(jUsuario.getValueAt(linhaSelecionada, 14).toString());
+        txtLogradouroFuncionario.setText(jUsuario.getValueAt(linhaSelecionada, 15).toString());
+        txtComplementoFuncionario.setText(jUsuario.getValueAt(linhaSelecionada, 16).toString());
+        txtNumeroFuncionario.setText(jUsuario.getValueAt(linhaSelecionada, 17).toString());
+        txtCidadeFuncionario.setText(jUsuario.getValueAt(linhaSelecionada, 18).toString());
+        txtEstadoFuncionario.setText(jUsuario.getValueAt(linhaSelecionada, 19).toString());
+        
+        
         
     }//GEN-LAST:event_jUsuarioMouseClicked
     //</editor-fold>
@@ -892,7 +899,7 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
      public void preencherTabelaUsuario(String SQL){
           ArrayList dados = new ArrayList();
          String[] colunas = new String[]{"idUsuário","Login","Perfil","Senha",
-             "CofirmaçaoSenha","idFuncionario","nomeFuncionario","cpf","rg",
+             "CofirmaçaoSenha","idfuncionario","nomeFuncionario","cpf","rg",
              "telefone","celular","email","dataNascimento","cep","bairro",
              "logradouro","complemento","numero","cidade","estado"};
          
@@ -904,10 +911,10 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
             do{    
                 dados.add(new Object[]{DAO.resultSet.getString("idUsuario"),DAO.resultSet.getString("Login"),
                     DAO.resultSet.getString("perfil"),DAO.resultSet.getString("senha"), DAO.resultSet.getString("confiSenha"),
-                    DAO.resultSet.getString("idfuncionario"),DAO.resultSet.getString("nomeFuncionario"),DAO.resultSet.getString("cpf"),
+                   DAO.resultSet.getString("idfuncionario"),DAO.resultSet.getString("nomeFuncionario"),DAO.resultSet.getString("cpf"),
                     DAO.resultSet.getString("rg"), DAO.resultSet.getString("telefone"),DAO.resultSet.getString("celular"), 
-                    DAO.resultSet.getString("email"),DAO.resultSet.getString("dataNascimento"),DAO.resultSet.getString("CEP"),
-                    DAO.resultSet.getString("Bairro"),DAO.resultSet.getString("logradouro"),DAO.resultSet.getString("complemento"),
+                    DAO.resultSet.getString("email"),DAO.resultSet.getString("dataNascimento"),DAO.resultSet.getString("cep"),
+                    DAO.resultSet.getString("bairro"),DAO.resultSet.getString("logradouro"),DAO.resultSet.getString("complemento"),
                     DAO.resultSet.getString("numero"),DAO.resultSet.getString("cidade"),DAO.resultSet.getString("estado")} );
             }while(DAO.resultSet.next());
         }catch(SQLException ex){}
@@ -923,36 +930,58 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
         jUsuario.getColumnModel().getColumn(2).setResizable(false); 
         jUsuario.getColumnModel().getColumn(3).setPreferredWidth(120);  
         jUsuario.getColumnModel().getColumn(3).setResizable(false); 
-        jUsuario.getColumnModel().getColumn(4).setMinWidth(0);  
-        jUsuario.getColumnModel().getColumn(4).setMaxWidth(0);
-        jUsuario.getColumnModel().getColumn(5).setMinWidth(0);  
+        jUsuario.getColumnModel().getColumn(4).setPreferredWidth(250);  
+        jUsuario.getColumnModel().getColumn(4).setResizable(false); 
         jUsuario.getColumnModel().getColumn(5).setMaxWidth(0);
+        jUsuario.getColumnModel().getColumn(5).setMinWidth(0);  
+        jUsuario.getColumnModel().getColumn(5).setResizable(false); 
         jUsuario.getColumnModel().getColumn(6).setMinWidth(0);  
         jUsuario.getColumnModel().getColumn(6).setMaxWidth(0);
+        jUsuario.getColumnModel().getColumn(6).setResizable(false); 
         jUsuario.getColumnModel().getColumn(7).setMinWidth(0);  
         jUsuario.getColumnModel().getColumn(7).setMaxWidth(0);
+        jUsuario.getColumnModel().getColumn(7).setResizable(false); 
         jUsuario.getColumnModel().getColumn(8).setMinWidth(0);  
         jUsuario.getColumnModel().getColumn(8).setMaxWidth(0);
+        jUsuario.getColumnModel().getColumn(8).setResizable(false); 
         jUsuario.getColumnModel().getColumn(9).setMinWidth(0);  
         jUsuario.getColumnModel().getColumn(9).setMaxWidth(0);
+        jUsuario.getColumnModel().getColumn(9).setResizable(false); 
         jUsuario.getColumnModel().getColumn(10).setMinWidth(0);  
         jUsuario.getColumnModel().getColumn(10).setMaxWidth(0);
+        jUsuario.getColumnModel().getColumn(10).setResizable(false); 
         jUsuario.getColumnModel().getColumn(11).setMinWidth(0);  
         jUsuario.getColumnModel().getColumn(11).setMaxWidth(0);
+        jUsuario.getColumnModel().getColumn(11).setResizable(false); 
         jUsuario.getColumnModel().getColumn(12).setMinWidth(0);  
         jUsuario.getColumnModel().getColumn(12).setMaxWidth(0);
+        jUsuario.getColumnModel().getColumn(12).setResizable(false); 
         jUsuario.getColumnModel().getColumn(13).setMinWidth(0);  
         jUsuario.getColumnModel().getColumn(13).setMaxWidth(0);
+        jUsuario.getColumnModel().getColumn(13).setResizable(false); 
         jUsuario.getColumnModel().getColumn(14).setMinWidth(0);  
         jUsuario.getColumnModel().getColumn(14).setMaxWidth(0);
+        jUsuario.getColumnModel().getColumn(14).setResizable(false); 
         jUsuario.getColumnModel().getColumn(15).setMinWidth(0);  
         jUsuario.getColumnModel().getColumn(15).setMaxWidth(0);
+        jUsuario.getColumnModel().getColumn(15).setResizable(false); 
         jUsuario.getColumnModel().getColumn(16).setMinWidth(0);  
         jUsuario.getColumnModel().getColumn(16).setMaxWidth(0);
+        jUsuario.getColumnModel().getColumn(16).setResizable(false); 
         jUsuario.getColumnModel().getColumn(17).setMinWidth(0);  
         jUsuario.getColumnModel().getColumn(17).setMaxWidth(0);
+        jUsuario.getColumnModel().getColumn(17).setResizable(false); 
         jUsuario.getColumnModel().getColumn(18).setMinWidth(0);  
         jUsuario.getColumnModel().getColumn(18).setMaxWidth(0);
+        jUsuario.getColumnModel().getColumn(18).setResizable(false); 
+        jUsuario.getColumnModel().getColumn(19).setMinWidth(0);  
+        jUsuario.getColumnModel().getColumn(19).setMaxWidth(0);
+        jUsuario.getColumnModel().getColumn(19).setResizable(false); 
+        jUsuario.getColumnModel().getColumn(20).setMinWidth(0);  
+        jUsuario.getColumnModel().getColumn(20).setMaxWidth(0);
+        jUsuario.getColumnModel().getColumn(19).setResizable(false); 
+        
+        
         jUsuario.getTableHeader().setReorderingAllowed(false);  // Não permite reordenar as colunas
         jUsuario.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); // Não permite redimensionar a tabela
         jUsuario.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // permite selecionar apenas 1 elemento da tabela
