@@ -185,14 +185,14 @@ public class DAO {
                 statement.executeUpdate();
                 
                 
-                sql = "select * from funcionario where cpf =? and rg =?";
+                sql = "select* from funcionario where cpf =? and rg =?";
                 bd.getConnection();
                 statement = bd.connection.prepareStatement(sql);
                 statement.setString(1, funcionario.getCpfFuncionario());
                 statement.setString(2, funcionario.getRgFuncionario());
                 ResultSet fk2 = statement.executeQuery();
                 fk2.next();
-                String FKfcn = fk.getString("idFuncionario");
+                String FKfcn = fk2.getString("idfuncionario");
                
                  // USUARIO
                 sql = "insert into usuario values(null,?,?,?,?,?)";

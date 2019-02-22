@@ -39,9 +39,12 @@ public class FuncionarioController {
         dao.endereco.setCidade(cidade);
         dao.endereco.setEstado(estado);
         
+        dao.usuario.setLoginUsuario(loginUsuario);
+        dao.usuario.setPerfilUsuario(perfilUsuario);
+        dao.usuario.setSenhaUsuario(SenhaUsuario);
+        dao.usuario.setConfirmacaoSenhaUsuario(confirmacaoSenhaUsuario);
         
-       
-       
+   
          String msgInclusao = dao.atualizar(DAO.INCLUSAOFUNCIONARIO);
         return msgInclusao;
     }
