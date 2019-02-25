@@ -1,0 +1,154 @@
+     
+                sql = "insert into endereco values(null,?,?,?,?,?,?,?)";
+                bd.getConnection();
+                statement = bd.connection.prepareStatement(sql);
+                statement.setString(1, endereco.getCep());
+                statement.setString(2, endereco.getBairro());
+                statement.setString(3, endereco.getLogradouro());
+                statement.setString(4, endereco.getComplemento());
+                statement.setString(5, endereco.getNumero());
+                statement.setString(6, endereco.getCidade());
+                statement.setString(7, endereco.getEstado());
+                
+                statement.executeUpdate();
+                
+               
+               
+                sql = "select* from endereco where cep =? and logradouro =? and numero =?";
+                bd.getConnection();
+                statement = bd.connection.prepareStatement(sql);
+                statement.setString(1, endereco.getCep());
+                statement.setString(2, endereco.getLogradouro());
+                statement.setString(3, endereco.getNumero());
+                ResultSet fk = statement.executeQuery();
+                fk.next();
+                String FKend = fk.getString("idendereco");
+
+
+               
+                
+               // FUNCIONARIO
+                
+                sql = "insert into funcionario values(null,?,?,?,?,?,?,?,?)";
+                bd.getConnection();
+                statement = bd.connection.prepareStatement(sql);
+                statement.setString(1, funcionario.getNomeFuncionario());
+                statement.setString(2, funcionario.getCpfFuncionario());
+                statement.setString(3, funcionario.getRgFuncionario());
+                statement.setString(4, funcionario.getTelFuncionario());
+                statement.setString(5, funcionario.getCelFuncionario());
+                statement.setString(6, funcionario.getEmailFuncionario());
+                statement.setString(7, funcionario.getDataNascFuncionario());
+                statement.setString(8, FKend);
+         
+                statement.executeUpdate();
+                
+                
+                sql = "select* from funcionario where cpf =? and rg =?";
+                bd.getConnection();
+                statement = bd.connection.prepareStatement(sql);
+                statement.setString(1, funcionario.getCpfFuncionario());
+                statement.setString(2, funcionario.getRgFuncionario());
+                ResultSet fk2 = statement.executeQuery();
+                fk2.next();
+                String FKfcn = fk2.getString("idfuncionario");
+               
+                 // USUARIO
+                sql = "insert into usuario values(null,?,?,?,?,?)";
+                bd.getConnection();
+                statement = bd.connection.prepareStatement(sql);
+                statement.setString(1, usuario.getLoginUsuario());
+                statement.setString(2, usuario.getPerfilUsuario());
+                statement.setString(3, usuario.getSenhaUsuario());
+                statement.setString(4, usuario.getConfirmacaoSenhaUsuario());
+                statement.setString(5,FKfcn);
+                
+                statement.executeUpdate();
+                statement.close();
+                
+                
+                break;
+
+
+
+
+
+SELECT idfuncionario FROM funcionario INNER JOIN endereco ON endereco.cep = "23223-223" INNER JOIN usuario ON usuario.login = "MARCINSG" WHERE cpf ="214.115.215-31" and rg ="2112-2121"
+
+
+22124-214
+
+
+
+
+
+ sql = "SELECT idfuncionario FROM funcionario INNER JOIN endereco ON endereco.cep = ?";
+                bd.getConnection();
+                statement = bd.connection.prepareStatement(sql);
+                statement.setString(1, endereco.getCep());
+                ResultSet rs = statement.executeQuery();
+                boolean existe = rs.next();
+                String FKend;
+                    if (existe == true){
+                         JOptionPane.showMessageDialog(null, "DADO EXISTENTE");
+                         
+                    }else{
+                        sql = "insert into endereco values(null,?,?,?,?,?,?,?)";
+                        bd.getConnection();
+                        statement = bd.connection.prepareStatement(sql);
+                        statement.setString(1, endereco.getCep());
+                        statement.setString(2, endereco.getBairro());
+                        statement.setString(3, endereco.getLogradouro());
+                        statement.setString(4, endereco.getComplemento());
+                        statement.setString(5, endereco.getNumero());
+                        statement.setString(6, endereco.getCidade());
+                        statement.setString(7, endereco.getEstado());
+                        statement.executeUpdate();
+                       
+                        sql = "select* from endereco where cep =? and logradouro =? and numero =?";
+                        bd.getConnection();
+                        statement = bd.connection.prepareStatement(sql);
+                        statement.setString(1, endereco.getCep());
+                        statement.setString(2, endereco.getLogradouro());
+                        statement.setString(3, endereco.getNumero());
+                        ResultSet fk = statement.executeQuery();
+                        fk.next();
+                        FKend = fk.getString("idendereco"); 
+                        
+                        sql = "insert into funcionario values(null,?,?,?,?,?,?,?,?)";
+                        bd.getConnection();
+                        statement = bd.connection.prepareStatement(sql);
+                        statement.setString(1, funcionario.getNomeFuncionario());
+                        statement.setString(2, funcionario.getCpfFuncionario());
+                        statement.setString(3, funcionario.getRgFuncionario());
+                        statement.setString(4, funcionario.getTelFuncionario());
+                        statement.setString(5, funcionario.getCelFuncionario());
+                        statement.setString(6, funcionario.getEmailFuncionario());
+                        statement.setString(7, funcionario.getDataNascFuncionario());
+                        statement.setString(8, FKend);
+                         statement.executeUpdate();
+                         
+                           
+                        sql = "select* from funcionario where cpf =? and rg =?";
+                        bd.getConnection();
+                        statement = bd.connection.prepareStatement(sql);
+                        statement.setString(1, funcionario.getCpfFuncionario());
+                        statement.setString(2, funcionario.getRgFuncionario());
+                         ResultSet fk2 = statement.executeQuery();
+                        fk2.next();
+                        String FKfcn = fk2.getString("idfuncionario");
+               
+                        // USUARIO
+                        sql = "insert into usuario values(null,?,?,?,?,?)";
+                        bd.getConnection();
+                        statement = bd.connection.prepareStatement(sql);
+                        statement.setString(1, usuario.getLoginUsuario());
+                        statement.setString(2, usuario.getPerfilUsuario());
+                        statement.setString(3, usuario.getSenhaUsuario());
+                        statement.setString(4, usuario.getConfirmacaoSenhaUsuario());
+                        statement.setString(5,FKfcn);
+                
+                        statement.executeUpdate();
+                        statement.close();
+            
+

@@ -4,7 +4,7 @@ package Controller;
 import Models.DAO;
 
 
-public class enderecoController {
+/*public class enderecoController {
     public String salvarEndereco(String cep, String bairro, String logradouro, 
             String complemento, String numero, String cidade, String estado){
         DAO dao = new DAO();
@@ -21,6 +21,5 @@ public class enderecoController {
         return msgInclusao;
     }
      
-  
+} */
     
-}

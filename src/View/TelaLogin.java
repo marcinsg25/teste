@@ -1,11 +1,18 @@
 
 package View;
 
+import Models.DAO;
+import Models.Usuario;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 
 
 public class TelaLogin extends javax.swing.JFrame {
     
-    
+    public DAO DAO;
     
     
    
@@ -23,8 +30,8 @@ public class TelaLogin extends javax.swing.JFrame {
         bt_acessar = new javax.swing.JButton();
         bt_sair = new javax.swing.JButton();
         JB_user = new javax.swing.JLabel();
-        JTusuario = new javax.swing.JTextField();
-        JTsenha = new javax.swing.JPasswordField();
+        txtUsuario = new javax.swing.JTextField();
+        txtSenha = new javax.swing.JPasswordField();
         JB_password = new javax.swing.JLabel();
         JL_LogoLogin = new javax.swing.JLabel();
         lbl = new javax.swing.JLabel();
@@ -57,10 +64,10 @@ public class TelaLogin extends javax.swing.JFrame {
         JB_user.setText("Usuário:");
         getContentPane().add(JB_user);
         JB_user.setBounds(180, 80, 80, 30);
-        getContentPane().add(JTusuario);
-        JTusuario.setBounds(260, 80, 160, 30);
-        getContentPane().add(JTsenha);
-        JTsenha.setBounds(260, 120, 160, 30);
+        getContentPane().add(txtUsuario);
+        txtUsuario.setBounds(260, 80, 160, 30);
+        getContentPane().add(txtSenha);
+        txtSenha.setBounds(260, 120, 160, 30);
 
         JB_password.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         JB_password.setForeground(new java.awt.Color(255, 255, 255));
@@ -87,12 +94,36 @@ public class TelaLogin extends javax.swing.JFrame {
     
     // <editor-fold defaultstate="collapsed" desc="BOTÃO ACESSAR"> 
     private void bt_acessarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_acessarActionPerformed
+        
         TelaPrincipal tela = new TelaPrincipal();
-        tela.setVisible(true);
-        dispose();// Fecha a tela login
-         
+                tela.setVisible(true);
+                dispose();// Fecha a tela login
+                
+                
+       /* boolean resposta = DAO.consultar(txtUsuario.getText(), txtSenha.getText());
+        if (resposta == true) {
+          if ("funcionário".equals(DAO.Acesso)) {
+                 TelaPrincipal tela = new TelaPrincipal();
+                tela.setVisible(true);
+                dispose();// Fecha a tela login
+            } else if("gerente".equals(DAO.Acesso)) {
+                 TelaAdmin tela2 = new TelaAdmin();
+                tela2.setVisible(true);
+                dispose();// Fecha a tela login
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Usuário e(ou) senha incorretos!");
+        }
+            
+            
+       
+  
+        }  */   
+       
     }//GEN-LAST:event_bt_acessarActionPerformed
-
+    // </editor-fold> 
+    
+    
+    
     private void bt_sairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_sairActionPerformed
         System.exit(0);
     }//GEN-LAST:event_bt_sairActionPerformed
@@ -138,11 +169,11 @@ public class TelaLogin extends javax.swing.JFrame {
     private javax.swing.JLabel JB_password;
     private javax.swing.JLabel JB_user;
     private javax.swing.JLabel JL_LogoLogin;
-    private javax.swing.JPasswordField JTsenha;
-    private javax.swing.JTextField JTusuario;
     private javax.swing.JButton bt_acessar;
     private javax.swing.JButton bt_sair;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lbl;
+    private javax.swing.JPasswordField txtSenha;
+    private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
 }

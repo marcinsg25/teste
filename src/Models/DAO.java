@@ -20,7 +20,7 @@ public class DAO {
     public Statement stm;
     public ResultSet resultSet;
     private String men, sql;
-    
+    public String Acesso;
     
     
     public static final byte INCLUSAOFUNCIONARIO = 1;
@@ -30,57 +30,33 @@ public class DAO {
    
     
     
-    //<editor-fold defaultstate="collapsed" desc=" MÉTODO LOCALIZAR MARCA ">
-    public String funcionario(){
-        String men = "Sucesso";
-        sql = "select * idendereco from endereco where cep = ? and logradouro = ? and numero = ?" ;
-        try{
-            bd.getConnection();
-            statement = bd.connection.prepareStatement(sql);
-            statement.setString(1, endereco.getCep());
-            statement.setString(2, endereco.getLogradouro());
-            statement.setString(3, endereco.getNumero());
-            resultSet = statement.executeQuery();
-            if (resultSet == null){
-                sql = "insert into endereco (cep, bairro, logradouro, complemento, numero, cidade, estado) values ("
-                        + "?,?,?,?,?,?,?)";
-                statement = bd.connection.prepareStatement(sql);
-                statement.setString(1, endereco.getCep());
-                statement.setString(2, endereco.getBairro());
-                statement.setString(3, endereco.getLogradouro());
-                statement.setString(4, endereco.getComplemento());
-                statement.setString(5, endereco.getNumero());
-                statement.setString(6, endereco.getCidade());
-                statement.setString(7, endereco.getEstado());  
-                statement.executeUpdate();
-                statement.close();
+    
+    
+     //<editor-fold defaultstate="collapsed" desc=" MÉTODO LOGIN ">
+    public boolean consultar(String login, String senha) {
+        boolean autenticado = false;
+       
+        try {
+           
+           sql = "select * from usuario where login= ? and senha=?";
+           bd.getConnection();
+           statement = bd.connection.prepareStatement(sql);
+           statement.setString(1, login);
+           statement.setString(2, senha);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+               Acesso = rs.getString("perfil");
+               autenticado = true;
+            } else {
+                rs.close();
+                return autenticado;
             }
-            else{
-                String x = resultSet.getString("idendereco");
-                statement.close();
-            } 
-            sql = "insert into funcionario (nomeFuncionario, cpf, rg, telefone, celular, email, dataNascimento, FKendereco) values(?,?,?,?,?,?,?,?)";
-            statement = bd.connection.prepareStatement(sql);
-            statement.setString(1, funcionario.getNomeFuncionario());
-            statement.setString(2, funcionario.getCpfFuncionario());
-            statement.setString(3, funcionario.getRgFuncionario());
-            statement.setString(4, funcionario.getTelFuncionario());
-            statement.setString(5, funcionario.getCelFuncionario());
-            statement.setString(6, funcionario.getEmailFuncionario());
-            statement.setString(7, funcionario.getDataNascFuncionario());
-            statement.setString(8, funcionario.getFkEnderecoFuncionario());
-            statement.executeUpdate();
-            statement.close();
-            
-            
-        }catch(SQLException erro){
-            men = "Falha na operação : \n" + erro.toString();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
         }
-        return men;
+        return autenticado;
     }
-    //</editor-fold>
-    
-    
+     //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc=" METODO DAO "> 
     public DAO(){
@@ -109,7 +85,7 @@ public class DAO {
             } else {
                 JOptionPane.showMessageDialog(null, "Não conectou.");
             }
-        } catch (SQLException erro) {JOptionPane.showMessageDialog(null,"fUNCIONA PORRA");}
+        } catch (SQLException erro) {}
     }
     //</editor-fold>
     
@@ -141,8 +117,9 @@ public class DAO {
             switch (operacao){
                 
                 // ENDERECO
-                case INCLUSAOFUNCIONARIO:
-                sql = "insert into endereco values(null,?,?,?,?,?,?,?)";
+            case INCLUSAOFUNCIONARIO:
+                
+               sql = "insert into endereco values(null,?,?,?,?,?,?,?)";
                 bd.getConnection();
                 statement = bd.connection.prepareStatement(sql);
                 statement.setString(1, endereco.getCep());
@@ -166,6 +143,8 @@ public class DAO {
                 ResultSet fk = statement.executeQuery();
                 fk.next();
                 String FKend = fk.getString("idendereco");
+
+
                
                 
                // FUNCIONARIO
@@ -210,12 +189,24 @@ public class DAO {
                 
                 break;
                 
-               case ALTERACAOFUNCIONARIO:
-               sql = "update Funcionario set   = ?,  = ?,  = ?,  = ?," 
-                + "   = ?,   = ?,   = ?,  = ? where = ?";
+            case ALTERACAOFUNCIONARIO:
+               
+               sql = "SELECT idfuncionario FROM funcionario INNER JOIN endereco ON "
+                       + "endereco.idendereco = funcionario.FKendereco INNER JOIN usuario ON "
+                       + "usuario.idUsuario = usuario.FKfuncionario WHERE cpf =? and rg =? ";
+                 bd.getConnection();
+                 statement = bd.connection.prepareStatement(sql);
+                 statement.setString(1, funcionario.getCpfFuncionario());
+                 statement.setString(2, funcionario.getRgFuncionario());
+                  ResultSet cv = statement.executeQuery();
+                        cv.next();
+                    String cvf = cv.getString("idfuncionario");
+                   
+                sql = "update funcionario set  nomeFuncionario = ?,  cpf = ?, rg = ?, telefone = ?," 
+                + "  celular = ?,  email = ?,  dataNascimento= ? where idfuncionario = ?";
                 bd.getConnection();
                 statement = bd.connection.prepareStatement(sql);
-                statement.setString(10, funcionario.getIdFuncionario());
+                statement.setString(8, cvf);
                 statement.setString(1, funcionario.getNomeFuncionario());
                 statement.setString(2, funcionario.getCpfFuncionario());
                 statement.setString(3, funcionario.getRgFuncionario());
@@ -223,9 +214,41 @@ public class DAO {
                 statement.setString(5, funcionario.getCelFuncionario());
                 statement.setString(6, funcionario.getEmailFuncionario());
                 statement.setString(7, funcionario.getDataNascFuncionario());
-                statement.setString(8, funcionario.getFkEnderecoFuncionario());
                
                
+                statement.executeUpdate();
+                
+                
+               
+             sql = "update endereco set cep  = ?, bairro = ?, logradouro = ?, complemento = ?," 
+                + "  numero = ?,  cidade = ?,  estado = ?  where idendereco = ?";
+                bd.getConnection();
+                statement = bd.connection.prepareStatement(sql);
+                 statement.setString(8, cvf);
+                statement.setString(1, endereco.getCep());
+                statement.setString(2, endereco.getBairro());
+                statement.setString(3, endereco.getLogradouro());
+                statement.setString(4, endereco.getComplemento());
+                statement.setString(5, endereco.getNumero());
+                statement.setString(6, endereco.getCidade());
+                statement.setString(7, endereco.getEstado());
+                statement.executeUpdate();
+                
+                
+
+                sql = "update usuario set  login = ?,  perfil= ?," 
+                + "  senha = ?,  confiSenha = ? where idUsuario= ?";
+                bd.getConnection();
+                statement = bd.connection.prepareStatement(sql);
+                statement.setString(5,  cvf);
+                statement.setString(1, usuario.getLoginUsuario());
+                statement.setString(2, usuario.getPerfilUsuario());
+                statement.setString(3, usuario.getSenhaUsuario());
+                statement.setString(4, usuario.getConfirmacaoSenhaUsuario());
+               
+                statement.executeUpdate();
+                
+                statement.close();
      
                 break;
                 
@@ -264,4 +287,81 @@ public class DAO {
         return men;
     }
     //</editor-fold>
+    
+     
+     //<editor-fold defaultstate="collapsed" desc=" pesquia endereco ">
+    public boolean cslEndereco(String cep) {
+        boolean autenticado = false;
+       
+        try {
+           
+           sql = "select * from endereco where cep= ?";
+           bd.getConnection();
+           statement = bd.connection.prepareStatement(sql);
+           statement.setString(1, cep);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+               Acesso = rs.getString("cep");
+               autenticado = true;
+            } else {
+                rs.close();
+                return autenticado;
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+        return autenticado;
+    }
+     //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc=" pesquia cpf">
+    public boolean cslcpf(String cpf) {
+        boolean autenticado = false;
+       
+        try {
+           
+           sql = "select * from funcionario where cpf= ?";
+           bd.getConnection();
+           statement = bd.connection.prepareStatement(sql);
+           statement.setString(1, cpf);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+               Acesso = rs.getString("cpf");
+               autenticado = true;
+            } else {
+                rs.close();
+                return autenticado;
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+        return autenticado;
+    }
+     //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc=" pesquia usuario">
+    public boolean csluser(String login) {
+        boolean autenticado = false;
+       
+        try {
+           
+           sql = "select * from usuario where login= ?";
+           bd.getConnection();
+           statement = bd.connection.prepareStatement(sql);
+           statement.setString(1, login);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+               Acesso = rs.getString("login");
+               autenticado = true;
+            } else {
+                rs.close();
+                return autenticado;
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+        return autenticado;
+    }
+     //</editor-fold>
+    
 }

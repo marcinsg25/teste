@@ -1,0 +1,90 @@
+ sql = "select * from endereco where cep = ?";
+                bd.getConnection();
+                statement = bd.connection.prepareStatement(sql);
+                statement.setString(1, endereco.getCep());
+                ResultSet rs = statement.executeQuery(sql);
+                 JOptionPane.showMessageDialog(null, rs);
+                if (rs.next()) {
+                    rs.first();
+                        
+                        int rse = rs.getInt("idendereco");
+                        
+                        if (rs.wasNull()) {
+                    
+                             sql = "insert into endereco values(null,?,?,?,?,?,?,?)";
+                             bd.getConnection();
+                            statement = bd.connection.prepareStatement(sql);
+                            statement.setString(1, endereco.getCep());
+                            statement.setString(2, endereco.getBairro());
+                            statement.setString(3, endereco.getLogradouro());
+                            statement.setString(4, endereco.getComplemento());
+                            statement.setString(5, endereco.getNumero());
+                            statement.setString(6, endereco.getCidade());
+                            statement.setString(7, endereco.getEstado());
+                            statement.executeUpdate();
+                
+                
+                            sql = "select* from endereco where cep =? and logradouro =? and numero =?";
+                            bd.getConnection();
+                            statement = bd.connection.prepareStatement(sql);
+                            statement.setString(1, endereco.getCep());
+                            statement.setString(2, endereco.getLogradouro());
+                            statement.setString(3, endereco.getNumero());
+                            ResultSet fk = statement.executeQuery();
+                            fk.next();
+                           rse = fk.getInt("idendereco");
+                        }
+                
+                        String x = Integer.toString(rse);
+                        
+                        sql = "select* from funcionario where cpf =? and rg =?";
+                        bd.getConnection();
+                        statement = bd.connection.prepareStatement(sql);
+                        statement.setString(1, funcionario.getCpfFuncionario());
+                        statement.setString(2, funcionario.getRgFuncionario());
+                        ResultSet rs2 = statement.executeQuery();
+                        
+                        
+                        if (rs2.next()) {
+                            rs2.first();
+                            int rsf = rs.getInt("idfuncionario");
+                             if (rs2.wasNull()) {
+                        
+                                sql = "insert into funcionario values(null,?,?,?,?,?,?,?,?)";
+                                bd.getConnection();
+                                statement = bd.connection.prepareStatement(sql);
+                                statement.setString(1, funcionario.getNomeFuncionario());
+                                statement.setString(2, funcionario.getCpfFuncionario());
+                                statement.setString(3, funcionario.getRgFuncionario());
+                                statement.setString(4, funcionario.getTelFuncionario());
+                                statement.setString(5, funcionario.getCelFuncionario());
+                                statement.setString(6, funcionario.getEmailFuncionario());
+                                statement.setString(7, funcionario.getDataNascFuncionario());
+                                statement.setString(8, x);
+                                statement.executeUpdate();
+                                
+                                sql = "select * from funcionario where cpf =? and rg =?";
+                                bd.getConnection();
+                                statement = bd.connection.prepareStatement(sql);
+                                statement.setString(1, funcionario.getCpfFuncionario());
+                                statement.setString(2, funcionario.getRgFuncionario());
+                                rs2 = statement.executeQuery(sql);
+                                rsf = rs2.getInt("idfuncionario");
+                                
+                                
+                            }
+                             
+                            String y = Integer.toString(rsf);
+                            
+                            sql = "insert into usuario values(null,?,?,?,?,?)";
+                            bd.getConnection();
+                            statement = bd.connection.prepareStatement(sql);
+                            statement.setString(1, usuario.getLoginUsuario());
+                            statement.setString(2, usuario.getPerfilUsuario());
+                            statement.setString(3, usuario.getSenhaUsuario());
+                            statement.setString(4, usuario.getConfirmacaoSenhaUsuario());
+                            statement.setString(5,y);
+                            statement.executeUpdate();
+                            statement.close(); 
+                        }
+             }
