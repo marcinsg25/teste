@@ -23,8 +23,10 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
     public ResultSet rs;
     public String[] codigo;
     public String[] codigop ; 
-     boolean vd;
+    int vd = 0;
     
+    boolean dp;
+    int x = 0;
     public TelaFuncionario() {
         initComponents();
         DAO = new DAO ();
@@ -42,9 +44,9 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
         preencherTabelaFuncionario(sqlTabela);
         preencherTabelaUsuario(sqlTabela2);
         habilitaCampos(false,false,false,false,false,false,false,false,false,
-                false,false,false,false,false,false,false,false,false);
+                    false,false,false,false,false,false,false,false,false);
         
-        habilitabotoes(true,false,false,false,false);
+        habilitabotoes(true,true,false,false,false);
     }
 
    
@@ -154,6 +156,11 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
+        txtCpfFuncionario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCpfFuncionarioActionPerformed(evt);
+            }
+        });
 
         try {
             txtDataNasc.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
@@ -599,6 +606,7 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
           btnLimparFuncionario.setEnabled(true);
           btnAlterarFuncionario.setEnabled(false);
           btnCancelarFuncionario.setEnabled(true);
+          vd = 1;
           
            habilitaCampos(true, true, true, true, true, true, true, true, true, 
                    true, true, true, true, true, true, true, true, true );
@@ -611,8 +619,12 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
     private void btnAlterarFuncionarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarFuncionarioActionPerformed
         habilitaCampos(true, true, true, true, true, true, true, true, true, 
                    true, true, true, true, true, true, true, true, true );
+        lblexistecep.setText("");
+        lblexistecpf.setText("");
+        lblexisteusuario.setText("");
         
-         vd = true;
+         vd = 2;
+        
           
          habilitabotoes(false,true,false,false,true);
     }//GEN-LAST:event_btnAlterarFuncionarioActionPerformed
@@ -621,69 +633,127 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
     //<editor-fold defaultstate="collapsed" desc=" BOTÃO GRAVAR ">
     private void btnGravarFuncionarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGravarFuncionarioActionPerformed
        
-       
+       boolean cf = DAO.cslcpf(txtCpfFuncionario.getText());
        boolean cs = DAO.cslEndereco(txtCepFuncionario.getText());
-        String msg = "CEP JÁ CADASTRADO";
-       if (cs == true){
-        lblexistecep.setText(msg);
-       }
-       
-        boolean cf = DAO.cslcpf(txtCpfFuncionario.getText());
-        String msg2 = "Cpf JÁ CADASTRADO";
-       if (cf == true ){
-        lblexistecpf.setText(msg2);
-       }
-       
-        boolean cuser = DAO.csluser(txtUsuarioFuncionario.getText());
-        String msg3 = "Usuario JÁ CADASTRADO";
-       if (cuser == true){
-        lblexisteusuario.setText(msg3);
-       }
-       
+       boolean cuser = DAO.csluser(txtUsuarioFuncionario.getText());
       
-      if(vd == false && cs != true && cf != true && cuser!= true ){
-        FuncionarioController Fc = new FuncionarioController();
-       String msg4 = Fc.salvarFuncionario(txtNomeFuncionario.getText(),txtCpfFuncionario.getText(),
-               txtRgFuncionario.getText(), txtTelFuncionario.getText(),txtCelFuncionario.getText(),
-               txtEmailFuncionario.getText(),txtDataNasc.getText(),txtCepFuncionario.getText(),txtBairroFuncionario.getText(),
-               txtLogradouroFuncionario.getText(),txtComplementoFuncionario.getText(),txtNumeroFuncionario.getText(),
-               txtCidadeFuncionario.getText(),txtEstadoFuncionario.getText(), txtUsuarioFuncionario.getText(), (String) cbPerfilFuncionario.getSelectedItem(),txtSenhaFuncionario.getText(),
-               txtConfirmacaoSenha.getText());
-                JOptionPane.showMessageDialog(null, msg4);
-      }
-      
+        lblexistecep.setText("");
+        lblexistecpf.setText("");
+        lblexisteusuario.setText("");
+       
+       
+                if (cf == true){
+                   pesquisaCpf(cs);
+               }else if(cs == true){
+                 
+                    pesquisaCep(cs);
+               }else if(cuser == true){     
+            
+                    pesquisaUser(cuser);    
+               }
+       
+       
+       switch (vd){
+             case 1:
+              
+                if(txtNomeFuncionario.getText().equals("")){
+                    JOptionPane.showMessageDialog(null, "Preencha o campo Produto.");
+                   txtNomeFuncionario.requestFocus();
+                    return;
+                } 
+                 
+                 
+               if (cf != true && cs != true && cuser!=true){
+                    FuncionarioController Fc = new FuncionarioController();
+                    Fc.salvarFuncionario(txtNomeFuncionario.getText(),txtCpfFuncionario.getText(),
+                    txtRgFuncionario.getText(), txtTelFuncionario.getText(),txtCelFuncionario.getText(),
+                    txtEmailFuncionario.getText(),txtDataNasc.getText(),txtCepFuncionario.getText(),txtBairroFuncionario.getText(),
+                    txtLogradouroFuncionario.getText(),txtComplementoFuncionario.getText(),txtNumeroFuncionario.getText(),
+                    txtCidadeFuncionario.getText(),txtEstadoFuncionario.getText(), txtUsuarioFuncionario.getText(), (String) cbPerfilFuncionario.getSelectedItem(),txtSenhaFuncionario.getText(),
+                    txtConfirmacaoSenha.getText());
+                    habilitaCampos(false,false,false,false,false,false,false,false,false,
+                    false,false,false,false,false,false,false,false,false);
+        
+                    habilitabotoes(true,false,false,false,false); 
+                    JOptionPane.showMessageDialog(null, "CADASTRO REALIZADO");
+                
+                    lblexistecep.setText("");
+                    lblexistecpf.setText("");
+                    lblexisteusuario.setText("");
+                
+                   
+                
+                
+                }
+                
+                break;
+                  
+            case 2:
+                FuncionarioController ac = new FuncionarioController();
+                ac.alterarFuncionario(txtNomeFuncionario.getText(),txtCpfFuncionario.getText(),
+                txtRgFuncionario.getText(), txtTelFuncionario.getText(),txtCelFuncionario.getText(),txtEmailFuncionario.getText(),
+                txtDataNasc.getText(),txtCepFuncionario.getText(),txtBairroFuncionario.getText(),
+                    txtLogradouroFuncionario.getText(),txtComplementoFuncionario.getText(),txtNumeroFuncionario.getText(),
+                    txtCidadeFuncionario.getText(),txtEstadoFuncionario.getText(),txtUsuarioFuncionario.getText(), 
+                    (String) cbPerfilFuncionario.getSelectedItem(),txtSenhaFuncionario.getText(), txtConfirmacaoSenha.getText());
+                    habilitaCampos(false,false,false,false,false,false,false,false,false,
+                     false,false,false,false,false,false,false,false,false);
+                        lblexistecep.setText("");
+                        lblexistecpf.setText("");
+                        lblexisteusuario.setText("");
+                  
+                    habilitabotoes(true,false,false,false,false); 
+                    JOptionPane.showMessageDialog(null, "ALTERACAO REALIZADA");
+                 
+                 break;
+               
+           }
+            
     
-      else {          
-        FuncionarioController Fc = new FuncionarioController();
-        
-           
-       String msg5 = Fc.alterarFuncionario(txtNomeFuncionario.getText(),txtCpfFuncionario.getText(),
-               txtRgFuncionario.getText(), txtTelFuncionario.getText(),txtCelFuncionario.getText(),txtEmailFuncionario.getText(),
-               txtDataNasc.getText(),txtCepFuncionario.getText(),txtBairroFuncionario.getText(),
-               txtLogradouroFuncionario.getText(),txtComplementoFuncionario.getText(),txtNumeroFuncionario.getText(),
-               txtCidadeFuncionario.getText(),txtEstadoFuncionario.getText(),txtUsuarioFuncionario.getText(), 
-               (String) cbPerfilFuncionario.getSelectedItem(),txtSenhaFuncionario.getText(), txtConfirmacaoSenha.getText());
-                 JOptionPane.showMessageDialog(null, msg5);
-           
-
-      }
-        
-      
+  
+          
         preencherTabelaFuncionario(sqlTabela);
         preencherTabelaUsuario(sqlTabela2);
         
    
-        habilitaCampos(false,false,false,false,false,false,false,false,false,
-                false,false,false,false,false,false,false,false,false);
-    
-        habilitabotoes(true,false,false,false,false);
-                
          
        
     }//GEN-LAST:event_btnGravarFuncionarioActionPerformed
     //</editor-fold>
     
-
+    //<editor-fold defaultstate="collapsed" desc=" PESQUISA CPF ">
+    public void pesquisaCpf(boolean cpf) {
+          if (cpf == true ) {
+             lblexistecpf.setText("CPF cadastrado");
+             
+          }else{
+               lblexistecpf.setText("");
+           }
+   }
+   //</editor-fold>    
+    
+    //<editor-fold defaultstate="collapsed" desc=" PESQUISA CEP ">
+    public void pesquisaCep(boolean cep) {
+       if (cep == true ) {
+             lblexistecep.setText("CEP cadastrado");
+       } else{
+               lblexistecep.setText("");
+       }    
+          
+   }
+   //</editor-fold> 
+    
+    //<editor-fold defaultstate="collapsed" desc=" PESQUISA USUARIO ">
+    public void pesquisaUser(boolean user) {
+        if ( user == true ) {
+             lblexisteusuario.setText("Usuario cadastrado");
+         } else{
+               lblexisteusuario.setText("");
+        }           
+          
+   }
+   //</editor-fold> 
+    
     //<editor-fold defaultstate="collapsed" desc=" METODO SELECAO LINHA FUNCIONARIO E BAIRRO ">
     private void jFuncionarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jFuncionarioMouseClicked
         
@@ -721,6 +791,9 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
         cbPerfilFuncionario.setSelectedItem(jFuncionario.getValueAt(linhaSelecionada, 16).toString());
         txtSenhaFuncionario.setText(jFuncionario.getValueAt(linhaSelecionada, 17).toString());
         txtConfirmacaoSenha.setText(jFuncionario.getValueAt(linhaSelecionada, 18).toString());
+        
+        habilitaCampos(false,false,false,false,false,false,false,false,false,
+                    false,false,false,false,false,false,false,false,false);
          habilitabotoes(false,false,true,false,true);
          
     }//GEN-LAST:event_jFuncionarioMouseClicked
@@ -764,6 +837,9 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
         txtCidadeFuncionario.setText(jUsuario.getValueAt(linhaSelecionada, 18).toString());
         txtEstadoFuncionario.setText(jUsuario.getValueAt(linhaSelecionada, 19).toString());
         
+        habilitaCampos(false,false,false,false,false,false,false,false,false,
+                    false,false,false,false,false,false,false,false,false);
+        
         habilitabotoes(false,false,true,false,true);
         
     }//GEN-LAST:event_jUsuarioMouseClicked
@@ -785,6 +861,14 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
     private void btnLimparFuncionarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparFuncionarioActionPerformed
         limparCampos();
     }//GEN-LAST:event_btnLimparFuncionarioActionPerformed
+
+    private void txtCpfFuncionarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCpfFuncionarioActionPerformed
+        boolean cf = DAO.cslcpf(txtCpfFuncionario.getText());
+        String msg2 = "Cpf JÁ CADASTRADO";
+       if (cf == true && dp == true){
+        lblexistecpf.setText(msg2);
+       }
+    }//GEN-LAST:event_txtCpfFuncionarioActionPerformed
     //</editor-fold>
   
     //<editor-fold defaultstate="collapsed" desc=" METODO BOTAO ">
@@ -833,6 +917,8 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
         }
         //</editor-fold>
          
+   
+        
     //<editor-fold defaultstate="collapsed" desc=" MÉTODO ATUALIZAR CAMPOS ">    
     public void atualizarCampos(){
         try{
@@ -877,6 +963,11 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
     }
     //</editor-fold>
    
+    
+    
+    
+    
+    
     //<editor-fold defaultstate="collapsed" desc=" MÉTODO LIMPAR CAMPOS ">
     public void limparCampos(){
       lblFuncionario.setText("");

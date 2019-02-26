@@ -21,7 +21,7 @@ public class DAO {
     public ResultSet resultSet;
     private String men, sql;
     public String Acesso;
-    
+    public String perfil;
     
     public static final byte INCLUSAOFUNCIONARIO = 1;
     public static final byte ALTERACAOFUNCIONARIO = 2;
@@ -32,31 +32,7 @@ public class DAO {
     
     
     
-     //<editor-fold defaultstate="collapsed" desc=" MÉTODO LOGIN ">
-    public boolean consultar(String login, String senha) {
-        boolean autenticado = false;
-       
-        try {
-           
-           sql = "select * from usuario where login= ? and senha=?";
-           bd.getConnection();
-           statement = bd.connection.prepareStatement(sql);
-           statement.setString(1, login);
-           statement.setString(2, senha);
-            ResultSet rs = statement.executeQuery();
-            if (rs.next()) {
-               Acesso = rs.getString("perfil");
-               autenticado = true;
-            } else {
-                rs.close();
-                return autenticado;
-            }
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex);
-        }
-        return autenticado;
-    }
-     //</editor-fold>
+    
     
     //<editor-fold defaultstate="collapsed" desc=" METODO DAO "> 
     public DAO(){
@@ -112,7 +88,7 @@ public class DAO {
     
     //<editor-fold defaultstate="collapsed" desc=" MÉTODO ATUALIZAR ">
     public String atualizar(int operacao){
-        men = "Operação realizada com sucesso!";
+       
         try{
             switch (operacao){
                 
@@ -288,6 +264,32 @@ public class DAO {
     }
     //</editor-fold>
     
+    
+     //<editor-fold defaultstate="collapsed" desc=" LOGIN ">
+    public boolean logar(String login ,String senha) {
+        boolean autenticado = false;
+       
+        try {
+           
+           sql = "select * from usuario where login= ? and senha= ?";
+           bd.getConnection();
+           statement = bd.connection.prepareStatement(sql);
+           statement.setString(1, login);
+           statement.setString(2, senha);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+             perfil = rs.getString("perfil");
+               autenticado = true;
+            } else {
+                rs.close();
+                return autenticado;
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+        return autenticado;
+    }
+     //</editor-fold>
      
      //<editor-fold defaultstate="collapsed" desc=" pesquia endereco ">
     public boolean cslEndereco(String cep) {

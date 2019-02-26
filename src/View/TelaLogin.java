@@ -30,12 +30,11 @@ public class TelaLogin extends javax.swing.JFrame {
         bt_acessar = new javax.swing.JButton();
         bt_sair = new javax.swing.JButton();
         JB_user = new javax.swing.JLabel();
-        txtUsuario = new javax.swing.JTextField();
         txtSenha = new javax.swing.JPasswordField();
+        txtUsuario = new javax.swing.JTextField();
         JB_password = new javax.swing.JLabel();
         JL_LogoLogin = new javax.swing.JLabel();
         lbl = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -64,10 +63,10 @@ public class TelaLogin extends javax.swing.JFrame {
         JB_user.setText("Usuário:");
         getContentPane().add(JB_user);
         JB_user.setBounds(180, 80, 80, 30);
-        getContentPane().add(txtUsuario);
-        txtUsuario.setBounds(260, 80, 160, 30);
         getContentPane().add(txtSenha);
         txtSenha.setBounds(260, 120, 160, 30);
+        getContentPane().add(txtUsuario);
+        txtUsuario.setBounds(260, 80, 160, 30);
 
         JB_password.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         JB_password.setForeground(new java.awt.Color(255, 255, 255));
@@ -83,10 +82,6 @@ public class TelaLogin extends javax.swing.JFrame {
         getContentPane().add(lbl);
         lbl.setBounds(0, 0, 450, 250);
 
-        jLabel1.setText("jLabel1");
-        getContentPane().add(jLabel1);
-        jLabel1.setBounds(360, 40, 34, 14);
-
         setSize(new java.awt.Dimension(450, 243));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
@@ -95,7 +90,7 @@ public class TelaLogin extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="BOTÃO ACESSAR"> 
     private void bt_acessarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_acessarActionPerformed
         
-        TelaPrincipal tela = new TelaPrincipal();
+       TelaPrincipal tela = new TelaPrincipal();
                 tela.setVisible(true);
                 dispose();// Fecha a tela login
                 
@@ -103,9 +98,7 @@ public class TelaLogin extends javax.swing.JFrame {
        /* boolean resposta = DAO.consultar(txtUsuario.getText(), txtSenha.getText());
         if (resposta == true) {
           if ("funcionário".equals(DAO.Acesso)) {
-                 TelaPrincipal tela = new TelaPrincipal();
-                tela.setVisible(true);
-                dispose();// Fecha a tela login
+                
             } else if("gerente".equals(DAO.Acesso)) {
                  TelaAdmin tela2 = new TelaAdmin();
                 tela2.setVisible(true);
@@ -171,7 +164,6 @@ public class TelaLogin extends javax.swing.JFrame {
     private javax.swing.JLabel JL_LogoLogin;
     private javax.swing.JButton bt_acessar;
     private javax.swing.JButton bt_sair;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lbl;
     private javax.swing.JPasswordField txtSenha;
     private javax.swing.JTextField txtUsuario;
